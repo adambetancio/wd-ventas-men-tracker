@@ -1,0 +1,824 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WD Ventas Men</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f7f7f7;color:#222;font:14px/1.5 system-ui,sans-serif}
+main{max-width:1360px;margin:auto;padding:24px}
+h1{font-size:25px;margin:0}
+h2,h3,p{margin:0 0 10px}
+h3{font-size:15px}
+header{margin-bottom:22px}
+small,.muted{color:#666}
+button,input,textarea{font:inherit}
+button{background:#f5f5f5;border:1px solid #ccc;border-radius:4px;
+padding:7px 10px;color:#222;cursor:pointer}
+button:hover{background:#eaeaea}
+button:disabled{opacity:.55;cursor:wait}
+input,textarea{border:1px solid #ccc;border-radius:4px;background:#fff;
+padding:8px;width:100%;min-width:0}
+textarea{resize:vertical;min-height:65px}
+label{display:grid;gap:4px;color:#555}
+form{display:grid;gap:9px}
+fieldset{border:0;padding:0;margin:0;min-width:0}
+.toolbar,.actions{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+.toolbar{margin:14px 0}
+#search{max-width:430px}
+#people{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+gap:16px;align-items:start}
+.card{background:#fff;border:1px solid #d5d5d5;border-radius:5px;padding:16px;min-width:0}
+.person-name{font-size:18px;font-weight:600;background:none;border:0;padding:0;
+text-align:left;overflow-wrap:anywhere}
+.person-head{display:flex;justify-content:space-between;gap:10px}
+.person-total{white-space:nowrap;font-weight:600}
+.balance{color:#555;margin:7px 0 12px}
+.body{border-top:1px solid #ddd;padding-top:14px;margin-top:14px}
+.items{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.item{border:1px solid #ddd;border-radius:4px;padding:10px;min-width:0}
+.photo{height:230px;background:#f1f1f1;display:flex;align-items:center;
+justify-content:center;border-radius:3px;margin-bottom:10px;color:#777}
+.photo img{width:100%;height:100%;object-fit:contain}
+.item-name{font-weight:600;overflow-wrap:anywhere}
+.item-price{font-weight:600;margin:4px 0}
+.detail,.flag,.note{white-space:pre-wrap;overflow-wrap:anywhere}
+.flag{border-left:2px solid #aaa;padding-left:8px;margin:8px 0;color:#555;font-size:13px}
+.item .actions{margin-top:10px}
+.item button{font-size:12px;padding:5px 7px}
+.section{border-top:1px solid #ddd;padding-top:14px;margin-top:16px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.payment{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid #eee;
+padding:8px 0}
+.note{margin-top:10px}
+.inline-editor{margin-top:8px}
+#add-person{margin:18px 0;max-width:650px}
+#summary{font-size:16px;margin-top:12px}
+#status{min-height:22px}
+#notice{white-space:pre-wrap;margin:10px 0;color:#444}
+dialog{max-width:460px;width:calc(100% - 32px);border:1px solid #bbb;
+border-radius:5px;padding:22px}
+dialog::backdrop{background:rgba(0,0,0,.25)}
+dialog .actions{justify-content:flex-end;margin-top:20px}
+[hidden]{display:none!important}
+:focus-visible{outline:2px solid #666;outline-offset:2px}
+@media(max-width:760px){
+ main{padding:15px}
+ #people,.items{grid-template-columns:1fr}
+ .two{grid-template-columns:1fr}
+ .person-head{flex-wrap:wrap}
+}
+</style>
+</head>
+<body>
+<main>
+<header>
+<h1>WD Ventas Men</h1>
+<div id="week">Semana del 9 al 15 de noviembre de 2026</div>
+<div id="summary">Cargando totales…</div>
+<small id="counts"></small>
+<div id="status" role="status">Conectando con Firebase…</div>
+</header>
+
+<div class="toolbar">
+<input id="search" type="search" placeholder="Buscar por nombre o teléfono"
+aria-label="Buscar por nombre o teléfono">
+<button id="new-week" disabled>Nueva semana</button>
+<button id="export" disabled>Exportar datos (JSON)</button>
+<button id="import" disabled>Importar datos (JSON)</button>
+<input id="import-file" type="file" accept=".json,application/json" hidden>
+</div>
+<div id="notice" role="status" aria-live="polite"></div>
+
+<details id="add-person">
+<summary>Agregar persona</summary>
+<form id="person-form" style="margin-top:12px">
+<div class="two">
+<label>Nombre<input name="name" required maxlength="200"></label>
+<label>Teléfono<input name="phone" type="tel" required></label>
+</div>
+<div><button type="submit" disabled>Agregar persona</button></div>
+</form>
+</details>
+
+<div id="people"></div>
+<p id="empty" hidden>No hay personas que coincidan con la búsqueda.</p>
+</main>
+
+<dialog id="confirmation">
+<form method="dialog">
+<p id="confirmation-text"></p>
+<label id="confirmation-label" hidden>
+Etiqueta de la semana
+<input id="confirmation-input">
+</label>
+<div class="actions">
+<button value="cancel">Cancelar</button>
+<button value="confirm" id="confirm-button">Confirmar</button>
+</div>
+</form>
+</dialog>
+
+<script type="module">
+const firebaseConfig = {
+  apiKey: "AIzaSyCcf5ei9bLRBb_W_ale4H7WJq4KJxFrGQU",
+  authDomain: "wd-ventas-men.firebaseapp.com",
+  databaseURL: "https://wd-ventas-men-default-rtdb.firebaseio.com",
+  projectId: "wd-ventas-men",
+  storageBucket: "wd-ventas-men.firebasestorage.app",
+  messagingSenderId: "746205817490",
+  appId: "1:746205817490:web:093da67597bb776cdc144b"
+};
+
+const initialWeek = "Semana del 9 al 15 de noviembre de 2026";
+const dates = {
+  ma:"mar 10 nov", mi:"mié 11 nov", ju:"jue 12 nov",
+  vi:"vie 13 nov", sa:"sáb 14 nov", lu:"lun 16 de nov"
+};
+
+// Cada artículo: nombre, precio, fecha, detalle, foto, pregunta pendiente.
+const rows = [
+["Sergio Leija","+52 1 81 8683 9976",null,[
+["Pantunflas cafés afelpadas",950,"ma","Cafés afelpadas, talla 8","sergio-leija-pantunflas-cafes.jpg"],
+["Denim jacket",1200,"ma","Talla G, 21:50","sergio-leija-chamarra-mezclilla.jpg"],
+["Set Realtree Edge 5 piezas",600,"mi","Camo gift set, 18:06","sergio-leija-set-realtree-edge.jpg"],
+["Termo camuflaje",690,"ju","Con asa y popote, 20:49","sergio-leija-termo-camuflaje.jpg"],
+["Chamarra puffer",990,"ju","Talla M, 22:22","sergio-leija-chamarra-puffer.jpg","Confirmar color: ¿gris o negra?"],
+["Chamarra camo",2300,"vi","Talla G, 21:58","sergio-leija-chamarra-camo.jpg"],
+["Navajas Buck 2-pack",1200,"sa","Mangos verdes, 12:29","sergio-leija-navajas-buck-2pack.jpg"]
+]],
+["Fatima Zenon","+52 1 871 369 6062",null,[
+["Tenis Reebok cafés",1400,"ma","Cafés, 21:06","fatima-zenon-tenis-reebok.jpg"],
+["Calcetas gruesas para el trabajo",320,"ma","21:29","fatima-zenon-calcetas-gruesas.jpg"],
+["Chamarra café doble interior",1000,"ma","Talla M, a prueba de agua y térmica, 21:33","fatima-zenon-chamarra-cafe.jpg"],
+["Termo HP",490,"mi","12:32","fatima-zenon-termo-hp.jpg"],
+["Termo Puma",450,"mi","12:34","fatima-zenon-termo-puma.jpg"],
+["Pantalonera negra",600,"mi","18:37","fatima-zenon-pantalonera-negra.jpg"],
+["Gorra pescado",210,"ju","20:57","fatima-zenon-gorra-pescado.jpg"],
+["Termo",650,"ju","21:07, 'Este por fa también' — Bass Pro Shops camo tumbler","fatima-zenon-termo-camo.jpg"],
+["Stanley azul",1450,"sa","22:13","fatima-zenon-stanley-azul.jpg"]
+]],
+["Perla Valentin","+52 1 55 7220 3663",null,[
+["Dockers Pants",480,"lu","",null],
+["Dockers Pants",480,"lu","",null],
+["Dockers Pants",480,"lu","",null],
+["Sudadera JACHS",380,"lu","",null],
+["Paquete de Calcetas",250,"lu","",null],
+["1 Chaleco Costco",465,"lu","",null],
+["Chamarra Costco",370,"lu","",null],
+["Chamarra Costco",370,"lu","",null],
+["Ropa termica",550,"lu","L",null],
+["Gorra con Orejitas",400,"lu","Cafe",null]
+]],
+["Mileny","+52 1 81 2093 6417",null,[
+["Pantalón táctico azul marino",950,"sa","Talla 36, 23:19","mileny-pantalon-tactico-azul-marino.jpg"],
+["Pantalón táctico verde oliva",950,"sa","Talla 36, 23:19","mileny-pantalon-tactico-azul-marino.jpg"],
+["Pantalón táctico azul marino",950,"sa","Talla 34, 23:19","mileny-pantalon-tactico-azul-marino.jpg"]
+]],
+["👹 Orlando","+52 1 81 3038 7014",null,[
+["Calcetines Puma 8 pares",300,"mi","Quarter crew, blanco/gris, 13:21","sergio-emoji-calcetines-puma-8-pares.jpg"],
+["Licra",560,"mi","13:31","sergio-emoji-licra-650.jpg"],
+["Set Eddie Bauer baselayer (térmico full negro)",590,"ju","2 piezas, XL, negro, graphene, 18:52","sergio-emoji-set-eddie-bauer-baselayer.jpg","La hoja lo trae como Térmico full negro mié 19:24, mismo artículo, fecha distinta en la hoja"],
+["Pantalón táctico negro",950,"sa","Talla 36, confirmado en chat privado — es el pantalón táctico del grupo ($950)","sergio-pantalon-tactico.jpg"]
+]],
+["Victor Mendoza","+52 1 81 1962 3863",null,[
+["Boxers New Balance 4-pack",450,"ma","Talla XL, 20:35, confirmado en chat privado","victor-mendoza-boxers-new-balance.jpg"],
+["Pantalonera gris claro",790,"ma","Talla XL, 21:35, confirmado en chat privado","victor-mendoza-pants-gris.jpg"],
+["Hoodie Puma gris oscuro",850,"ju","22:37, confirmado en chat privado","victor-mendoza-hoodie-puma-gris.jpg"]
+]],
+["Deyanira López","+52 1 81 3627 3994",null,[
+["Corbata azul",380,"mi","18:01","deyanira-lopez-corbatas-miercoles.jpg"],
+["Corbata verde",380,"mi","18:01","deyanira-lopez-corbatas-miercoles.jpg"],
+["Corbata azul cuadrada",380,"ju","18:51","deyanira-lopez-corbatas-jueves.jpg"],
+["Corbata negra de figuras",380,"ju","18:51","deyanira-lopez-corbatas-jueves.jpg"],
+["Avalanche para Monse",450,"ju","Pedido por Deyanira para Monse, 19:19","deyanira-lopez-avalanche-para-monse.jpg","Confirmar: ¿gaiter/cuello o hoodie?"]
+]],
+["soporte técnico LDH.!","+52 1 81 3117 1385",null,[
+["Chamarra de doble interior a prueba de agua y térmica",1000,"ma","XL negra, 12:15","soporte-ldh-chamarra-doble-interior.jpg"],
+["Huaraches Puma negras",650,"ma","Negras, talla 10 MX, 21:04","soporte-tecnico-huaraches-puma-negras.jpg"]
+]],
+["Vicky Montoya","+52 1 81 1025 0852","Paga en 5 pagos de $306 (total $1,530) — lo confirmó con Flaca en el grupo",[
+["Sudadera Nike Sportswear crema",750,"ma","Talla XXL, 21:43","vicky-montoya-sudadera-nike-750.jpg"],
+["Pantalón cargo Puma",780,"ma","Talla S, 21:28","vicky-montoya-pantalon-cargo-puma.jpg","La foto muestra pantalón cargo Puma $780, no manga larga Columbia — confirmar que es este"]
+]],
+["Karelly Ramierez","+52 1 81 1675 5569",null,[
+["Chamarra Under Armour negra",750,"ma","Negra, 20:25","karelly-ramierez-chamarra-under-armour-negra.jpg"],
+["Hoodie gris jaspe",690,"ju","Talla L, 19:12","karelly-ramierez-hoodie-gris-jaspe.jpg"]
+]],
+["Flaca<33","+52 1 81 3119 0881",null,[
+["Caballete Crayola Junior Artist",1400,"ju","Doble cara, para niños, 22:17","flaca-caballete-crayola-junior-artist.jpg"]
+]],
+["Bere Diaz","+52 1 81 2347 8952",null,[
+["Chamarra de doble interior a prueba de agua y térmica",1000,"ma","Talla XXL, 21:39","bere-diaz-chamarra-doble-interior-xxl.jpg"]
+]],
+["▫️","+52 1 81 1742 0293",null,[
+["Set de póker 300 piezas",990,"vi","Cardinal Classics, 20:39","poker-set-cardinal-classics.jpg"]
+]],
+["Ricardo Guevara","+52 1 81 8054 2495",null,[
+["Termo de la Coca",480,"mi","12:26, confirmado por Flaca en el grupo","ricardo-guevara-termo-coca.jpg"],
+["Rastrillos",320,"mi","'$320 con 25 repuestos', 13:02",null,"Sin identificar, preguntar qué es"]
+]],
+["Yare 💋","+52 1 81 3444 1959",null,[
+["Kit Wahl corta-cabello",700,"mi","Kit completo, 13:10","yare-kit-wahl-corta-cabello.jpg"]
+]],
+["Yulieth Acevedo","+52 1 81 4028 5811",null,[
+["Termo camuflaje",690,"ju","Con asa y popote, 21:16","yulieth-acevedo-termo-camuflaje.jpg"]
+]],
+["Athziry💕","+52 1 81 2203 5065",null,[
+["Calcetines New Balance 10 pares",590,"mi","Ankle, blancas, logo rojo, 18:21","athziry-calcetines-new-balance.jpg"]
+]],
+["Ashley Solis","+52 1 81 1530 9437",null,[
+["Boxers NB",450,"ma","20:44, confirmado por Flaca en el grupo","ashley-solis-boxers-nb.jpg"]
+]],
+["Jenny Villasana","+52 1 81 3130 8220",null,[
+["Calcetines Champion 6 pares",350,"mi","Performance Cushion Quarter, blancas, 18:21","jenny-villasana-calcetines-champion.jpg"]
+]]
+];
+
+const $ = id => document.getElementById(id);
+const money = n => "$" + new Intl.NumberFormat("en-US",{
+  minimumFractionDigits:0,maximumFractionDigits:2
+}).format(n);
+const entries = value => Object.entries(value || {});
+const values = value => Object.values(value || {});
+const clone = value => JSON.parse(JSON.stringify(value));
+const cents = n => Math.round(Number(n || 0) * 100);
+const cleanSearch = value => String(value).normalize("NFD")
+  .replace(/[\u0300-\u036f]/g,"").toLowerCase();
+
+function phoneKey(phone){
+  const key = String(phone).replace(/\D/g,"");
+  if(key.length < 7 || key.length > 15)
+    throw Error("Escribe un teléfono válido de 7 a 15 dígitos.");
+  return key;
+}
+function amount(value, optional=false){
+  if(value === "" || value === null || value === undefined){
+    if(optional) return null;
+    throw Error("Escribe un importe.");
+  }
+  const n = Number(value);
+  if(!Number.isFinite(n) || n < 0 || n > 100000000 ||
+    Math.abs(n*100-Math.round(n*100)) > 0.000001)
+    throw Error("Usa un importe válido con un máximo de dos decimales.");
+  return n;
+}
+function totals(person){
+  const total = values(person.items).reduce((s,i)=>s+cents(i.price),0);
+  const paid = values(person.payments).reduce((s,p)=>s+cents(p.amount),0);
+  return {total:total/100,paid:paid/100,balance:(total-paid)/100};
+}
+function totalLine(person){
+  const t = totals(person);
+  return `Total: ${money(t.total)} | Pagado: ${money(t.paid)} | Saldo: ${money(t.balance)}`;
+}
+function photoSource(photo){
+  if(!photo) return "";
+  if(/^data:image\/(?:jpeg|png|webp|gif);base64,[a-zA-Z0-9+/=\s]+$/.test(photo))
+    return photo;
+  if(/^[a-zA-Z0-9][a-zA-Z0-9_. -]*\.(?:jpg|jpeg|png|webp|gif)$/i.test(photo))
+    return "./images/" + encodeURIComponent(photo);
+  return "";
+}
+
+const seed = {weekLabel:initialWeek,currency:"MXN",people:{}};
+for(const [name,phone,note,items] of rows){
+  seed.people[phoneKey(phone)] = {
+    name,phone,note,items:Object.fromEntries(items.map((r,index)=>[
+      "item_" + String(index+1).padStart(3,"0"),
+      {name:r[0],price:r[1],date:dates[r[2]],detail:r[3],
+       flag:r[5] ?? null,photo:r[4] ?? null}
+    ])),payments:{}
+  };
+}
+
+// Comprobaciones de los datos iniciales.
+const seedPeople = values(seed.people);
+const seedCount = seedPeople.reduce((s,p)=>s+values(p.items).length,0);
+const seedTotal = seedPeople.reduce((s,p)=>s+cents(totals(p).total),0)/100;
+if(seedPeople.length!==19 || seedCount!==57 || seedTotal!==39625)
+  throw Error("Los datos iniciales no coinciden con los totales esperados.");
+const expected = {
+  "Sergio Leija":7930,"Fatima Zenon":6570,"Perla Valentin":4225,
+  "Mileny":2850,"👹 Orlando":2400,"Victor Mendoza":2090
+};
+for(const [name,value] of entries(expected)){
+  if(totals(seedPeople.find(p=>p.name===name)).total!==value)
+    throw Error("Subtotal inicial incorrecto: "+name);
+}
+
+function el(tag,text,className){
+  const node = document.createElement(tag);
+  if(text!==undefined && text!==null) node.textContent=text;
+  if(className) node.className=className;
+  return node;
+}
+function notify(message){ $("notice").textContent=message; }
+function fail(error){
+  console.error(error);
+  const msg = String(error?.message || error);
+  notify(/permission|denied/i.test(msg)
+    ? "Firebase rechazó la operación. Revisa los permisos de lectura y escritura."
+    : msg);
+}
+function button(text,fn){
+  const b=el("button",text); b.type="button";
+  b.addEventListener("click",async()=>{
+    if(b.disabled) return;
+    b.disabled=true;
+    try{await fn();}catch(e){fail(e);}
+    finally{b.disabled=false;}
+  });
+  return b;
+}
+function field(label,type="text",required=false){
+  const l=el("label",label);
+  const input=el(type==="textarea" ? "textarea":"input");
+  if(type!=="textarea") input.type=type;
+  input.required=required;
+  if(type==="number"){input.min="0";input.step="0.01";}
+  l.append(input);
+  return {label:l,input};
+}
+function submitForm(form,fn){
+  form.addEventListener("submit",async event=>{
+    event.preventDefault();
+    const buttons=[...form.querySelectorAll("button")];
+    buttons.forEach(b=>b.disabled=true);
+    try{await fn();}catch(e){fail(e);}
+    finally{buttons.forEach(b=>b.disabled=false);}
+  });
+}
+function submitButton(text){
+  const b=el("button",text); b.type="submit"; return b;
+}
+function confirmAction(text,labelValue){
+  return new Promise(resolve=>{
+    const dialog=$("confirmation");
+    $("confirmation-text").textContent=text;
+    $("confirmation-label").hidden=labelValue===undefined;
+    $("confirmation-input").value=labelValue ?? "";
+    dialog.returnValue="";
+    dialog.addEventListener("close",()=>resolve({
+      ok:dialog.returnValue==="confirm",
+      value:$("confirmation-input").value.trim()
+    }),{once:true});
+    dialog.showModal();
+    $("confirm-button").focus();
+  });
+}
+function editor(host,label,getValue,save,type="text",optional=false){
+  const wrapper=el("div","", "inline-editor");
+  const launch=button(label,()=>{
+    control.input.value=getValue() ?? "";
+    form.hidden=false; launch.hidden=true; control.input.focus();
+  });
+  const form=el("form");form.hidden=true;
+  const control=field(label,type,!optional);
+  const actions=el("div","", "actions");
+  const close=()=>{form.hidden=true;launch.hidden=false;};
+  actions.append(submitButton("Guardar"),button("Cancelar",close));
+  form.append(control.label,actions);
+  submitForm(form,async()=>{
+    await save(control.input.value);
+    close();
+  });
+  wrapper.append(launch,form);host.append(wrapper);
+}
+
+async function readPhoto(file){
+  if(!file) return null;
+  if(!/^image\/(jpeg|png|webp|gif)$/.test(file.type))
+    throw Error("Selecciona una imagen JPG, PNG, WEBP o GIF.");
+  if(file.size>20*1024*1024)
+    throw Error("La imagen debe pesar menos de 20 MB.");
+  const url=URL.createObjectURL(file);
+  try{
+    const image=new Image();image.src=url;
+    await image.decode();
+    const ratio=Math.min(1,1600/Math.max(image.width,image.height));
+    const canvas=document.createElement("canvas");
+    canvas.width=Math.max(1,Math.round(image.width*ratio));
+    canvas.height=Math.max(1,Math.round(image.height*ratio));
+    const ctx=canvas.getContext("2d");
+    ctx.fillStyle="#ffffff";ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.drawImage(image,0,0,canvas.width,canvas.height);
+    return canvas.toDataURL("image/jpeg",.85);
+  }finally{URL.revokeObjectURL(url);}
+}
+
+let data=null,ready=false,db;
+let ref,set,update,remove,push,runTransaction,onValue,get;
+const cards=new Map();
+
+function personAt(key){
+  const p=data?.people?.[key];
+  if(!p) throw Error("Esta persona ya no existe. Actualiza la página.");
+  return p;
+}
+function itemAt(key,id){
+  const item=personAt(key).items?.[id];
+  if(!item) throw Error("Este artículo ya no existe.");
+  return item;
+}
+const personPath=key=>"tracker/people/"+key;
+function write(path,value){return set(ref(db,path),value);}
+function shareMessage(person){
+  const week=data.weekLabel===initialWeek
+    ? "Semana 9-15 nov" : (data.weekLabel || "Semana actual");
+  return [
+    "WD Ventas Men — "+week,
+    person.name,
+    person.phone,
+    ...values(person.items).map(i=>
+      `• ${i.name} — ${i.price==null ? "precio por confirmar":money(i.price)}`),
+    totalLine(person),
+    ...(person.note ? [person.note]:[])
+  ].join("\n");
+}
+function exportData(){
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob);
+  const a=el("a");a.href=url;
+  a.download="wd-ventas-men-"+new Date().toISOString().slice(0,10)+".json";
+  a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+function itemView(key,id){
+  const node=el("article","", "item");
+  const photo=el("div","Sin foto","photo");
+  const name=el("div","", "item-name");
+  const price=el("div","", "item-price");
+  const date=el("small");
+  const detail=el("div","", "detail");
+  const flag=el("div","", "flag");
+  const actions=el("div","", "actions");
+  node.append(photo,name,price,date,detail,flag,actions);
+  const base=personPath(key)+"/items/"+id;
+  editor(node,"Editar nombre",()=>itemAt(key,id).name,async value=>{
+    if(!value.trim())throw Error("Escribe el nombre del artículo.");
+    itemAt(key,id);
+    await write(base+"/name",value.trim());
+  });
+  editor(node,"Editar precio",()=>itemAt(key,id).price,async value=>{
+    itemAt(key,id);
+    await write(base+"/price",amount(value,true));
+  },"number",true);
+  const upload=el("input");upload.type="file";
+  upload.accept="image/jpeg,image/png,image/webp,image/gif";upload.hidden=true;
+  upload.addEventListener("change",async()=>{
+    try{
+      const value=await readPhoto(upload.files[0]);
+      if(value){itemAt(key,id);await write(base+"/photo",value);}
+    }catch(e){fail(e);}finally{upload.value="";}
+  });
+  actions.append(
+    button("Cambiar foto",()=>upload.click()),
+    button("Quitar",async()=>{itemAt(key,id);await remove(ref(db,base));})
+  );
+  node.append(upload);
+  let previousPhoto;
+  return {
+    node,
+    refresh(item){
+      name.textContent=item.name;
+      price.textContent=item.price==null ? "precio por confirmar":money(item.price);
+      date.textContent=item.date || "";
+      detail.textContent=item.detail || "";
+      flag.textContent=item.flag || "";flag.hidden=!item.flag;
+      if(previousPhoto!==item.photo){
+        previousPhoto=item.photo;
+        const src=photoSource(item.photo);
+        photo.replaceChildren(el("span","Sin foto"));
+        if(src){
+          const img=el("img");img.alt=item.name;img.loading="lazy";
+          img.addEventListener("error",()=>photo.replaceChildren(el("span","Sin foto")));
+          img.src=src;photo.replaceChildren(img);
+        }
+      }
+      const img=photo.querySelector("img");
+      if(img)img.alt=item.name;
+    }
+  };
+}
+
+function personView(key){
+  const node=el("article","", "card");
+  const head=el("div","", "person-head");
+  const toggle=el("button","", "person-name");
+  toggle.type="button";toggle.setAttribute("aria-expanded","false");
+  const total=el("span","", "person-total");
+  head.append(toggle,total);
+  const phone=el("div","", "muted");
+  const balance=el("div","", "balance");
+  const actions=el("div","", "actions");
+  const note=el("div","", "note");
+  const body=el("div","", "body");body.hidden=true;
+  const itemContainer=el("div","", "items");
+  const itemViews=new Map();
+  const noItems=el("p","Sin artículos.","muted");
+  body.append(itemContainer,noItems);
+  toggle.addEventListener("click",()=>{
+    body.hidden=!body.hidden;
+    toggle.setAttribute("aria-expanded",String(!body.hidden));
+  });
+  node.append(head,phone,balance,actions,note,body);
+
+  editor(actions,"Editar nombre",()=>personAt(key).name,async value=>{
+    if(!value.trim())throw Error("Escribe un nombre.");
+    personAt(key);
+    await write(personPath(key)+"/name",value.trim());
+  });
+  editor(actions,"Editar teléfono",()=>personAt(key).phone,async value=>{
+    const newKey=phoneKey(value),newPhone=value.trim();
+    if(newKey===key){
+      await write(personPath(key)+"/phone",newPhone);return;
+    }
+    const result=await runTransaction(ref(db,"tracker/people"),current=>{
+      if(!current?.[key] || current[newKey])return;
+      const next={...current};
+      next[newKey]={...current[key],phone:newPhone};
+      delete next[key];return next;
+    },{applyLocally:false});
+    if(!result.committed)
+      throw Error("No se pudo cambiar el teléfono: ya existe o la persona fue eliminada.");
+  },"tel");
+  actions.append(
+    button("Compartir por WhatsApp",()=>{
+      const text=shareMessage(personAt(key));
+      window.open("https://api.whatsapp.com/send?text="+encodeURIComponent(text),
+        "_blank","noopener,noreferrer");
+    }),
+    button("Eliminar",async()=>{
+      const p=personAt(key);
+      if((await confirmAction(`¿Eliminar a ${p.name} y todos sus artículos?`)).ok)
+        await remove(ref(db,personPath(key)));
+    })
+  );
+  editor(node,"Editar nota",()=>personAt(key).note,async value=>{
+    personAt(key);await write(personPath(key)+"/note",value.trim() || null);
+  },"textarea",true);
+
+  const addSection=el("section","", "section");
+  addSection.append(el("h3","Agregar artículo"));
+  const addForm=el("form");
+  const product=field("Nombre del producto","text",true);
+  const cost=field("Precio (opcional)","number");
+  const when=field("Fecha (opcional)");
+  const details=field("Detalle (opcional)");
+  const picture=field("Foto (opcional)","file");
+  picture.input.accept="image/jpeg,image/png,image/webp,image/gif";
+  const pair=el("div","", "two");pair.append(cost.label,when.label);
+  addForm.append(product.label,pair,details.label,picture.label,submitButton("Agregar artículo"));
+  submitForm(addForm,async()=>{
+    const name=product.input.value.trim();
+    if(!name)throw Error("Escribe el nombre del producto.");
+    const item={
+      name,price:amount(cost.input.value,true),
+      date:when.input.value.trim(),detail:details.input.value.trim(),
+      flag:null,photo:await readPhoto(picture.input.files[0])
+    };
+    personAt(key);
+    await set(push(ref(db,personPath(key)+"/items")),item);
+    addForm.reset();
+  });
+  addSection.append(addForm);body.append(addSection);
+
+  const paymentSection=el("section","", "section");
+  paymentSection.append(el("h3","Pagos"));
+  const payments=el("div");
+  const paymentForm=el("form");
+  const payAmount=field("Monto","number",true);payAmount.input.min=".01";
+  const payNote=field("Nota (opcional)");
+  paymentForm.append(payAmount.label,payNote.label,submitButton("Registrar pago"));
+  submitForm(paymentForm,async()=>{
+    const value=amount(payAmount.input.value);
+    if(value<=0)throw Error("El pago debe ser mayor que cero.");
+    personAt(key);
+    await set(push(ref(db,personPath(key)+"/payments")),{
+      amount:value,note:payNote.input.value.trim(),date:new Date().toISOString()
+    });
+    paymentForm.reset();
+  });
+  paymentSection.append(payments,paymentForm);body.append(paymentSection);
+
+  return {
+    node,
+    refresh(person){
+      const t=totals(person);
+      toggle.textContent=person.name;
+      phone.textContent=person.phone;
+      total.textContent=money(t.total);
+      balance.textContent=`Pagado: ${money(t.paid)} · Saldo: ${money(t.balance)}`;
+      note.textContent=person.note || "";note.hidden=!person.note;
+      const current=person.items || {};
+      for(const [id,view] of itemViews){
+        if(!Object.hasOwn(current,id)){view.node.remove();itemViews.delete(id);}
+      }
+      for(const [id,item] of entries(current)){
+        let view=itemViews.get(id);
+        if(!view){
+          view=itemView(key,id);itemViews.set(id,view);itemContainer.append(view.node);
+        }
+        view.refresh(item);
+      }
+      noItems.hidden=entries(current).length>0;
+      payments.replaceChildren();
+      for(const [id,payment] of entries(person.payments)){
+        const row=el("div","", "payment");
+        const text=el("div");
+        text.append(el("strong",money(payment.amount)));
+        let dateText=payment.date || "";
+        const parsed=new Date(dateText);
+        if(dateText && !Number.isNaN(parsed.getTime()))
+          dateText=new Intl.DateTimeFormat("es-MX",{
+            dateStyle:"medium",timeStyle:"short",timeZone:"America/Monterrey"
+          }).format(parsed);
+        text.append(el("div",[dateText,payment.note].filter(Boolean).join(" · ")));
+        row.append(text,button("Quitar pago",async()=>{
+          personAt(key);
+          await remove(ref(db,personPath(key)+"/payments/"+id));
+        }));
+        payments.append(row);
+      }
+      if(!entries(person.payments).length)payments.append(el("p","Sin pagos registrados.","muted"));
+    }
+  };
+}
+
+function render(){
+  if(!data)return;
+  const people=data.people || {};
+  let total=0,paid=0,itemCount=0;
+  for(const p of values(people)){
+    const t=totals(p);
+    total+=cents(t.total);paid+=cents(t.paid);
+    itemCount+=values(p.items).length;
+  }
+  $("week").textContent=data.weekLabel || "Semana actual";
+  $("summary").textContent=
+    `Total: ${money(total/100)} | Pagado: ${money(paid/100)} | Saldo: ${money((total-paid)/100)}`;
+  $("counts").textContent=`${values(people).length} personas · ${itemCount} artículos · MXN`;
+  for(const [key,view] of cards){
+    if(!Object.hasOwn(people,key)){view.node.remove();cards.delete(key);}
+  }
+  for(const [key,person] of entries(people)){
+    let view=cards.get(key);
+    if(!view){view=personView(key);cards.set(key,view);$("people").append(view.node);}
+    view.refresh(person);
+  }
+  filter();
+}
+function filter(){
+  const query=cleanSearch($("search").value.trim());
+  const digits=query.replace(/\D/g,"");
+  let shown=0;
+  for(const [key,view] of cards){
+    const p=data.people[key];
+    const matches=!query ||
+      cleanSearch(p.name+" "+p.phone).includes(query) ||
+      (digits.length>0 && p.phone.replace(/\D/g,"").includes(digits));
+    view.node.hidden=!matches;
+    if(matches)shown++;
+  }
+  $("empty").hidden=shown>0;
+}
+$("search").addEventListener("input",filter);
+
+submitForm($("person-form"),async()=>{
+  if(!ready)throw Error("Espera a que termine la conexión.");
+  const form=$("person-form");
+  const name=form.elements.name.value.trim();
+  const phone=form.elements.phone.value.trim();
+  if(!name)throw Error("Escribe un nombre.");
+  const key=phoneKey(phone);
+  const result=await runTransaction(ref(db,personPath(key)),current=>
+    current===null ? {name,phone,note:null}:undefined,{applyLocally:false});
+  if(!result.committed)throw Error("Ya existe una persona con ese teléfono.");
+  form.reset();$("add-person").open=false;
+});
+
+$("export").addEventListener("click",()=>{try{exportData();}catch(e){fail(e);}});
+$("import").addEventListener("click",()=>$("import-file").click());
+
+function validateImport(raw){
+  if(!raw || typeof raw!=="object" || !raw.people ||
+    typeof raw.people!=="object")
+    throw Error("El archivo debe contener un objeto con la propiedad people.");
+  const result={
+    weekLabel:typeof raw.weekLabel==="string" ? raw.weekLabel:initialWeek,
+    currency:"MXN",people:{}
+  };
+  const validId=id=>/^[a-zA-Z0-9_-]{1,150}$/.test(id);
+  for(const person of values(raw.people)){
+    if(!person || typeof person.name!=="string" ||
+      typeof person.phone!=="string" || !person.name.trim())
+      throw Error("Hay una persona con nombre o teléfono inválido.");
+    const key=phoneKey(person.phone);
+    if(Object.hasOwn(result.people,key))throw Error("Hay teléfonos duplicados.");
+    const p={
+      name:person.name,phone:person.phone,
+      note:typeof person.note==="string"?person.note:null,items:{},payments:{}
+    };
+    for(const [oldId,item] of entries(person.items)){
+      if(!item || typeof item.name!=="string" || !item.name.trim())
+        throw Error("Hay un artículo sin nombre válido.");
+      const id=Array.isArray(person.items)?"item_"+oldId:oldId;
+      if(!validId(id))throw Error("Identificador de artículo inválido.");
+      if(item.photo && !photoSource(item.photo))throw Error("Hay una foto inválida.");
+      p.items[id]={
+        name:item.name,price:amount(item.price,true),
+        date:typeof item.date==="string"?item.date:"",
+        detail:typeof item.detail==="string"?item.detail:"",
+        flag:typeof item.flag==="string"?item.flag:null,
+        photo:item.photo || null
+      };
+    }
+    for(const [oldId,payment] of entries(person.payments)){
+      const id=Array.isArray(person.payments)?"payment_"+oldId:oldId;
+      if(!validId(id) || !payment)throw Error("Pago inválido.");
+      const value=amount(payment.amount);
+      if(value<=0)throw Error("Los pagos deben ser mayores que cero.");
+      p.payments[id]={
+        amount:value,note:typeof payment.note==="string"?payment.note:"",
+        date:typeof payment.date==="string"?payment.date:""
+      };
+    }
+    result.people[key]=p;
+  }
+  return result;
+}
+$("import-file").addEventListener("change",async event=>{
+  try{
+    const file=event.target.files[0];if(!file)return;
+    if(file.size>50*1024*1024)throw Error("El archivo debe pesar menos de 50 MB.");
+    const imported=validateImport(JSON.parse(await file.text()));
+    const answer=await confirmAction(
+      "¿Reemplazar todos los datos compartidos con este archivo? Se descargará una copia de los datos actuales antes de continuar.");
+    if(!answer.ok)return;
+    exportData();
+    await set(ref(db,"tracker"),imported);
+    notify("Datos importados.");
+  }catch(e){fail(e);}finally{event.target.value="";}
+});
+
+$("new-week").addEventListener("click",async()=>{
+  try{
+    const first=await confirmAction(
+      "Nueva semana: se conservarán las personas, sus teléfonos y sus notas. Se quitarán todos los artículos y pagos.",
+      "Semana nueva");
+    if(!first.ok)return;
+    if(!first.value)throw Error("Escribe la etiqueta de la nueva semana.");
+    const second=await confirmAction(
+      "¿Confirmar el inicio de la nueva semana? Se descargará una copia antes de borrar los artículos y pagos.");
+    if(!second.ok)return;
+    exportData();
+    const changes={weekLabel:first.value};
+    for(const key of Object.keys(data.people || {})){
+      changes["people/"+key+"/items"]=null;
+      changes["people/"+key+"/payments"]=null;
+    }
+    await update(ref(db,"tracker"),changes);
+    notify("Nueva semana iniciada.");
+  }catch(e){fail(e);}
+});
+
+try{
+  const [appSDK,databaseSDK]=await Promise.all([
+    import("https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js"),
+    import("https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js")
+  ]);
+  ({ref,set,update,remove,push,runTransaction,onValue,get}=databaseSDK);
+  db=databaseSDK.getDatabase(appSDK.initializeApp(firebaseConfig));
+  const tracker=ref(db,"tracker");
+
+  // La transacción impide que dos primeras visitas sobrescriban datos.
+  const existing=await get(tracker);
+  if(!existing.exists()){
+    await runTransaction(tracker,current=>
+      current===null ? clone(seed):undefined,{applyLocally:false});
+  }
+
+  onValue(tracker,snapshot=>{
+    data=snapshot.val() || {weekLabel:initialWeek,currency:"MXN",people:{}};
+    ready=true;
+    render();
+    for(const id of ["new-week","export","import"])$(id).disabled=false;
+    $("person-form").querySelector("button").disabled=false;
+  },error=>{
+    $("status").textContent="No se pudieron leer los datos.";
+    fail(error);
+  });
+  onValue(ref(db,".info/connected"),snapshot=>{
+    $("status").textContent=snapshot.val()
+      ? "Conectado · Cambios compartidos en tiempo real"
+      : "Sin conexión · Mantén esta página abierta hasta que se guarden los cambios";
+  });
+}catch(error){
+  $("status").textContent="No se pudo conectar con Firebase.";
+  fail(error);
+}
+</script>
+</body>
+</html>
