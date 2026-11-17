@@ -2,835 +2,709 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>WD Ventas Men</title>
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#f3f1ec;color:#1f2937;font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}
-main{max-width:1360px;margin:auto;padding:24px}
-h1{font-size:28px;margin:0;letter-spacing:-.02em}
-h2,h3,p{margin:0 0 10px}
-h3{font-size:15px}
-header{background:linear-gradient(135deg,#14532d,#166534);color:#fff;border-radius:14px;padding:22px 24px;margin-bottom:20px;box-shadow:0 4px 18px rgba(20,83,45,.25)}
-header #week{color:#d1fae5;font-size:14px;margin-top:4px}
-header #summary{font-size:18px;font-weight:700;margin-top:12px}
-header #counts{color:#bbf7d0}
-header #status{color:#d1fae5}
-small,.muted{color:#6b7280}
-button,input,textarea,select{font:inherit}
-button{background:#fff;border:1px solid #d1d5db;border-radius:8px;padding:8px 12px;color:#1f2937;cursor:pointer;font-weight:600}
-button:hover{background:#f3f4f6;border-color:#9ca3af}
-button:disabled{opacity:.55;cursor:wait}
-input,textarea,select{border:1px solid #d1d5db;border-radius:8px;background:#fff;padding:9px 11px;width:100%;min-width:0}
-select{width:auto;cursor:pointer}
-input:focus,textarea:focus{border-color:#16a34a;outline:2px solid #bbf7d0}
-textarea{resize:vertical;min-height:65px}
-label{display:grid;gap:4px;color:#4b5563}
-form{display:grid;gap:9px}
-fieldset{border:0;padding:0;margin:0;min-width:0}
-.toolbar,.actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.toolbar{margin:14px 0}
-#search{max-width:430px;border-radius:999px;padding:10px 16px}
-#people{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}
-.card{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:18px;min-width:0;box-shadow:0 1px 4px rgba(0,0,0,.06)}
-.person-name{font-size:19px;font-weight:700;background:none;border:0;padding:0;text-align:left;overflow-wrap:anywhere;color:#111827}
-.person-head{display:flex;justify-content:space-between;gap:10px}
-.person-total{white-space:nowrap;font-weight:700;color:#15803d;font-size:17px}
-.balance{color:#4b5563;margin:7px 0 12px}
-.body{border-top:1px solid #e5e7eb;padding-top:14px;margin-top:14px}
-.items{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.item{border:1px solid #e5e7eb;border-radius:12px;padding:12px;min-width:0;background:#fbfbf9}
-.photo{height:230px;background:#eef2ee;display:flex;align-items:center;justify-content:center;border-radius:10px;margin-bottom:10px;color:#6b7280;overflow:hidden}
-.photo img{width:100%;height:100%;object-fit:contain}
-.item-name{font-weight:700;overflow-wrap:anywhere}
-.item-price{font-weight:700;margin:4px 0;color:#15803d;font-size:16px}
-.detail,.flag,.note{white-space:pre-wrap;overflow-wrap:anywhere}
-.flag{border-left:3px solid #f59e0b;background:#fffbeb;padding:8px 10px;border-radius:0 8px 8px 0;margin:8px 0;color:#92400e;font-size:13px}
-.item .actions{margin-top:10px}
-.item button{font-size:12px;padding:6px 9px}
-.section{border-top:1px solid #e5e7eb;padding-top:14px;margin-top:16px}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-.payment{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid #f3f4f6;padding:8px 0}
-.note{margin-top:10px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:10px 12px;color:#14532d}
-.inline-editor{margin-top:8px}
-#add-person{margin:18px 0;max-width:650px;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:14px 16px}
-#add-person summary{font-weight:700;cursor:pointer}
-#summary{font-size:16px;margin-top:12px}
-#status{min-height:22px}
-#notice{white-space:pre-wrap;margin:10px 0;color:#444}
-dialog{max-width:460px;width:calc(100% - 32px);border:1px solid #d1d5db;border-radius:12px;padding:22px}
-dialog::backdrop{background:rgba(0,0,0,.35)}
-dialog .actions{justify-content:flex-end;margin-top:20px}
-[hidden]{display:none!important}
-:focus-visible{outline:2px solid #16a34a;outline-offset:2px}
-@media(max-width:760px){
- main{padding:15px}
- #people,.items{grid-template-columns:1fr}
- .two{grid-template-columns:1fr}
- .person-head{flex-wrap:wrap}
- header{padding:18px}
-}
+* { box-sizing: border-box; }
+body { margin: 0; background: #f3f1ec; color: #1f2937; font: 15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; }
+main { max-width: 1360px; padding: 24px; margin: auto; }
+header { background: linear-gradient(135deg,#14532d,#166534); color: #fff; border-radius: 14px; padding: 22px 24px; margin-bottom: 20px; box-shadow: 0 4px 18px rgba(20,83,45,.25); }
+header h1 { font-size: 28px; margin: 0; letter-spacing: -.02em; }
+header #week-label { color: #d1fae5; font-size: 14px; margin-top: 4px; }
+header #summary { font-size: 18px; font-weight: 700; margin-top: 12px; }
+header #connection { color: #bbf7d0; }
+header #notice { color: #d1fae5; }
+h1 { font-size: 26px; margin: 0 0 4px; } h2 { font-size: 18px; } h3 { font-size: 15px; }
+button, input, select, textarea { font: inherit; border: 1px solid #d1d5db; border-radius: 8px; padding: 8px 11px; color: inherit; }
+button { cursor: pointer; background: #fff; font-weight: 600; } button:hover { background: #f3f4f6; border-color: #9ca3af; }
+button:disabled { opacity: .5; cursor: default; }
+input, select, textarea { background: white; width: 100%; min-width: 0; }
+input:focus, select:focus, textarea:focus { border-color: #16a34a; outline: 2px solid #bbf7d0; }
+textarea { min-height: 75px; resize: vertical; }
+label { display: grid; gap: 4px; color: #4b5563; } form { display: grid; gap: 10px; }
+small, .muted { color: #6b7280; } p { margin: 8px 0; }
+.toolbar, .actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.toolbar { margin: 16px 0; } .toolbar label { flex: 1; min-width: 200px; }
+.panel, .card { border: 1px solid #e5e7eb; border-radius: 14px; background: white; padding: 18px; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+.panel { margin: 16px 0; } .grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px; align-items: start; }
+.row { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }
+.quick { grid-template-columns: 2fr 1fr 1fr auto; align-items: end; }
+.name { border: 0; background: transparent; font-size: 19px; font-weight: 700; text-align: left; padding: 0; color: #111827; }
+.body { margin-top: 16px; border-top: 1px solid #e5e7eb; padding-top: 12px; }
+.section { margin-top: 16px; padding-top: 12px; border-top: 1px solid #e5e7eb; }
+.item { border: 1px solid #e5e7eb; border-radius: 12px; padding: 12px; min-width: 0; background: #fbfbf9; }
+.item-price { color: #15803d; font-weight: 700; font-size: 16px; }
+.photo { height: 230px; background: #eef2ee; display: grid; place-items: center; color: #6b7280; margin-bottom: 10px; border-radius: 10px; overflow: hidden; }
+.photo img { width: 100%; height: 230px; object-fit: contain; }
+.badge { display: inline-block; border: 1px solid #bbf7d0; background: #f0fdf4; color: #14532d; padding: 3px 8px; border-radius: 999px; margin: 4px 4px 4px 0; font-size: 12px; font-weight: 600; }
+.flag { border-left: 3px solid #f59e0b; background: #fffbeb; padding: 8px 10px; border-radius: 0 8px 8px 0; margin: 8px 0; color: #92400e; font-size: 13px; }
+.note, .flag, .detail { white-space: pre-wrap; overflow-wrap: anywhere; }
+.note { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 10px 12px; color: #14532d; }
+.editor { margin: 8px 0; } .payment { padding: 8px 0; border-bottom: 1px solid #f3f4f6; }
+.menu { position: relative; } .menu summary { cursor: pointer; padding: 7px 10px; border: 1px solid #d1d5db; border-radius: 8px; background: #fff; font-weight: 600; }
+.menu-items { position: absolute; z-index: 5; top: 100%; left: 0; width: 230px; background: white; border: 1px solid #d1d5db; border-radius: 10px; padding: 6px; display: grid; gap: 5px; box-shadow: 0 4px 14px rgba(0,0,0,.12); }
+table { width: 100%; border-collapse: collapse; font-size: 13px; } td, th { text-align: left; padding: 7px 4px; border-bottom: 1px solid #f3f4f6; }
+.table-wrap { overflow-x: auto; }
+dialog { width: min(560px,calc(100% - 30px)); border: 1px solid #d1d5db; border-radius: 12px; padding: 22px; }
+dialog::backdrop { background: rgba(0,0,0,.35); } dialog textarea { min-height: 240px; }
+#notice { white-space: pre-wrap; margin: 10px 0; } #summary { font-size: 16px; margin: 10px 0; }
+[hidden] { display: none !important; } :focus-visible { outline: 2px solid #16a34a; outline-offset: 2px; }
+@media(max-width:760px) { main { padding: 14px; } .grid, .row, .quick { grid-template-columns: 1fr; } header { padding: 18px; } }
 </style>
 </head>
 <body>
 <main>
 <header>
 <h1>WD Ventas Men</h1>
-<div id="week">Semana del 9 al 15 de noviembre de 2026</div>
-<div id="summary">Cargando totales…</div>
-<small id="counts"></small>
-<div id="status" role="status">Conectando con Firebase…</div>
+<div id="week-label"></div>
+<div id="summary">Cargando…</div>
+<div id="connection" class="muted" role="status">Conectando con Firebase…</div>
+<div id="notice" role="status" aria-live="polite"></div>
 </header>
-
+<section class="panel">
+<h2>Registrar pago</h2>
+<form id="quick-payment" class="quick">
+<label>Persona<select name="person" required disabled><option value="">Seleccionar persona</option></select></label>
+<label>Monto (MXN)<input name="amount" type="number" min="0.01" step="0.01" required></label>
+<label>Fecha del pago<input name="date" type="date" required></label>
+<button type="submit" disabled>Registrar pago</button>
+<label>Filtrar personas<input id="payment-search" type="search" placeholder="Nombre o teléfono"></label>
+<label>Nota (opcional)<input name="note"></label>
+</form>
+</section>
 <div class="toolbar">
-<input id="search" type="search" placeholder="Buscar por nombre o teléfono"
-aria-label="Buscar por nombre o teléfono">
-<select id="sort" aria-label="Ordenar personas">
-<option value="default">Orden: como siempre</option>
-<option value="owed-desc" selected>Más adeudado primero</option>
-<option value="owed-asc">Menos adeudado primero</option>
-</select>
+<label>Buscar cliente<input id="search" type="search" placeholder="Nombre o teléfono"></label>
+<label>Ordenar personas<select id="sort"><option value="default">Orden: como siempre</option><option value="owed-desc" selected>Más adeudado primero</option><option value="owed-asc">Menos adeudado primero</option></select></label>
+<label>Semana de cobro que quieres revisar<input id="collection-week" type="date"></label>
 <button id="new-week" disabled>Nueva semana</button>
 <button id="export" disabled>Exportar datos (JSON)</button>
 <button id="import" disabled>Importar datos (JSON)</button>
 <input id="import-file" type="file" accept=".json,application/json" hidden>
 </div>
-<div id="notice" role="status" aria-live="polite"></div>
-
-<details id="add-person">
-<summary>Agregar persona</summary>
-<form id="person-form" style="margin-top:12px">
-<div class="two">
-<label>Nombre<input name="name" required maxlength="200"></label>
+<p id="collection-label" class="muted"></p>
+<details class="panel"><summary>Agregar persona</summary>
+<form id="add-person"><div class="row">
+<label>Nombre<input name="name" required></label>
 <label>Teléfono<input name="phone" type="tel" required></label>
-</div>
-<div><button type="submit" disabled>Agregar persona</button></div>
-</form>
+</div><button type="submit" disabled>Agregar persona</button></form>
 </details>
-
-<div id="people"></div>
-<p id="empty" hidden>No hay personas que coincidan con la búsqueda.</p>
+<div id="people" class="grid"></div>
+<p id="empty" hidden>No hay personas para mostrar.</p>
 </main>
-
-<dialog id="confirmation">
-<form method="dialog">
-<p id="confirmation-text"></p>
-<label id="confirmation-label" hidden>
-Etiqueta de la semana
-<input id="confirmation-input">
-</label>
-<div class="actions">
-<button value="cancel">Cancelar</button>
-<button value="confirm" id="confirm-button">Confirmar</button>
-</div>
-</form>
-</dialog>
-
-<script type="module">
-const firebaseConfig = {
-  apiKey: "AIzaSyCcf5ei9bLRBb_W_ale4H7WJq4KJxFrGQU",
-  authDomain: "wd-ventas-men.firebaseapp.com",
-  databaseURL: "https://wd-ventas-men-default-rtdb.firebaseio.com",
-  projectId: "wd-ventas-men",
-  storageBucket: "wd-ventas-men.firebasestorage.app",
-  messagingSenderId: "746205817490",
-  appId: "1:746205817490:web:093da67597bb776cdc144b"
-};
-
-const initialWeek = "Semana del 9 al 15 de noviembre de 2026";
-const dates = {
-  ma:"mar 10 nov", mi:"mié 11 nov", ju:"jue 12 nov",
-  vi:"vie 13 nov", sa:"sáb 14 nov", lu:"lun 16 de nov"
-};
-
-// Cada artículo: nombre, precio, fecha, detalle, foto, pregunta pendiente.
-const rows = [
-["Sergio Leija","+52 1 81 8683 9976",null,[
-["Pantunflas cafés afelpadas",950,"ma","Cafés afelpadas, talla 8","sergio-leija-pantunflas-cafes.jpg"],
-["Denim jacket",1200,"ma","Talla G, 21:50","sergio-leija-chamarra-mezclilla.jpg"],
-["Set Realtree Edge 5 piezas",600,"mi","Camo gift set, 18:06","sergio-leija-set-realtree-edge.jpg"],
-["Termo camuflaje",690,"ju","Con asa y popote, 20:49","sergio-leija-termo-camuflaje.jpg"],
-["Chamarra puffer",990,"ju","Talla M, 22:22","sergio-leija-chamarra-puffer.jpg","Confirmar color: ¿gris o negra?"],
-["Chamarra camo",2300,"vi","Talla G, 21:58","sergio-leija-chamarra-camo.jpg"],
-["Navajas Buck 2-pack",1200,"sa","Mangos verdes, 12:29","sergio-leija-navajas-buck-2pack.jpg"]
-]],
-["Fatima Zenon","+52 1 871 369 6062",null,[
-["Tenis Reebok cafés",1400,"ma","Cafés, 21:06","fatima-zenon-tenis-reebok.jpg"],
-["Calcetas gruesas para el trabajo",320,"ma","21:29","fatima-zenon-calcetas-gruesas.jpg"],
-["Chamarra café doble interior",1000,"ma","Talla M, a prueba de agua y térmica, 21:33","fatima-zenon-chamarra-cafe.jpg"],
-["Termo HP",490,"mi","12:32","fatima-zenon-termo-hp.jpg"],
-["Termo Puma",450,"mi","12:34","fatima-zenon-termo-puma.jpg"],
-["Pantalonera negra",600,"mi","18:37","fatima-zenon-pantalonera-negra.jpg"],
-["Gorra pescado",210,"ju","20:57","fatima-zenon-gorra-pescado.jpg"],
-["Termo",650,"ju","21:07, 'Este por fa también' — Bass Pro Shops camo tumbler","fatima-zenon-termo-camo.jpg"],
-["Stanley azul",1450,"sa","22:13","fatima-zenon-stanley-azul.jpg"]
-]],
-["Perla Valentin","+52 1 55 7220 3663",null,[
-["Dockers Pants",480,"lu","",null],
-["Dockers Pants",480,"lu","",null],
-["Dockers Pants",480,"lu","",null],
-["Sudadera JACHS",380,"lu","",null],
-["Paquete de Calcetas",250,"lu","",null],
-["1 Chaleco Costco",465,"lu","",null],
-["Chamarra Costco",370,"lu","",null],
-["Chamarra Costco",370,"lu","",null],
-["Ropa termica",550,"lu","L",null],
-["Gorra con Orejitas",400,"lu","Cafe",null]
-]],
-["Mileny","+52 1 81 2093 6417",null,[
-["Pantalón táctico azul marino",950,"sa","Talla 36, 23:19","mileny-pantalon-tactico-azul-marino.jpg"],
-["Pantalón táctico verde oliva",950,"sa","Talla 36, 23:19","mileny-pantalon-tactico-azul-marino.jpg"],
-["Pantalón táctico azul marino",950,"sa","Talla 34, 23:19","mileny-pantalon-tactico-azul-marino.jpg"]
-]],
-["👹 Orlando","+52 1 81 3038 7014",null,[
-["Calcetines Puma 8 pares",300,"mi","Quarter crew, blanco/gris, 13:21","sergio-emoji-calcetines-puma-8-pares.jpg"],
-["Licra",560,"mi","13:31","sergio-emoji-licra-650.jpg"],
-["Set Eddie Bauer baselayer (térmico full negro)",590,"ju","2 piezas, XL, negro, graphene, 18:52","sergio-emoji-set-eddie-bauer-baselayer.jpg","La hoja lo trae como Térmico full negro mié 19:24, mismo artículo, fecha distinta en la hoja"],
-["Pantalón táctico negro",950,"sa","Talla 36, confirmado en chat privado — es el pantalón táctico del grupo ($950)","sergio-pantalon-tactico.jpg"]
-]],
-["Victor Mendoza","+52 1 81 1962 3863",null,[
-["Boxers New Balance 4-pack",450,"ma","Talla XL, 20:35, confirmado en chat privado","victor-mendoza-boxers-new-balance.jpg"],
-["Pantalonera gris claro",790,"ma","Talla XL, 21:35, confirmado en chat privado","victor-mendoza-pants-gris.jpg"],
-["Hoodie Puma gris oscuro",850,"ju","22:37, confirmado en chat privado","victor-mendoza-hoodie-puma-gris.jpg"]
-]],
-["Deyanira López","+52 1 81 3627 3994",null,[
-["Corbata azul",380,"mi","18:01","deyanira-lopez-corbatas-miercoles.jpg"],
-["Corbata verde",380,"mi","18:01","deyanira-lopez-corbatas-miercoles.jpg"],
-["Corbata azul cuadrada",380,"ju","18:51","deyanira-lopez-corbatas-jueves.jpg"],
-["Corbata negra de figuras",380,"ju","18:51","deyanira-lopez-corbatas-jueves.jpg"],
-["Avalanche para Monse",450,"ju","Pedido por Deyanira para Monse, 19:19","deyanira-lopez-avalanche-para-monse.jpg","Confirmar: ¿gaiter/cuello o hoodie?"]
-]],
-["soporte técnico LDH.!","+52 1 81 3117 1385",null,[
-["Chamarra de doble interior a prueba de agua y térmica",1000,"ma","XL negra, 12:15","soporte-ldh-chamarra-doble-interior.jpg"],
-["Huaraches Puma negras",650,"ma","Negras, talla 10 MX, 21:04","soporte-tecnico-huaraches-puma-negras.jpg"]
-]],
-["Vicky Montoya","+52 1 81 1025 0852","Paga en 5 pagos de $306 (total $1,530) — lo confirmó con Flaca en el grupo",[
-["Sudadera Nike Sportswear crema",750,"ma","Talla XXL, 21:43","vicky-montoya-sudadera-nike-750.jpg"],
-["Pantalón cargo Puma",780,"ma","Talla S, 21:28","vicky-montoya-pantalon-cargo-puma.jpg","La foto muestra pantalón cargo Puma $780, no manga larga Columbia — confirmar que es este"]
-]],
-["Karelly Ramierez","+52 1 81 1675 5569",null,[
-["Chamarra Under Armour negra",750,"ma","Negra, 20:25","karelly-ramierez-chamarra-under-armour-negra.jpg"],
-["Hoodie gris jaspe",690,"ju","Talla L, 19:12","karelly-ramierez-hoodie-gris-jaspe.jpg"]
-]],
-["Flaca<33","+52 1 81 3119 0881",null,[
-["Caballete Crayola Junior Artist",1400,"ju","Doble cara, para niños, 22:17","flaca-caballete-crayola-junior-artist.jpg"]
-]],
-["Bere Diaz","+52 1 81 2347 8952",null,[
-["Chamarra de doble interior a prueba de agua y térmica",1000,"ma","Talla XXL, 21:39","bere-diaz-chamarra-doble-interior-xxl.jpg"]
-]],
-["▫️","+52 1 81 1742 0293",null,[
-["Set de póker 300 piezas",990,"vi","Cardinal Classics, 20:39","poker-set-cardinal-classics.jpg"]
-]],
-["Ricardo Guevara","+52 1 81 8054 2495",null,[
-["Termo de la Coca",480,"mi","12:26, confirmado por Flaca en el grupo","ricardo-guevara-termo-coca.jpg"],
-["Rastrillos",320,"mi","'$320 con 25 repuestos', 13:02",null,"Sin identificar, preguntar qué es"]
-]],
-["Yare 💋","+52 1 81 3444 1959",null,[
-["Kit Wahl corta-cabello",700,"mi","Kit completo, 13:10","yare-kit-wahl-corta-cabello.jpg"]
-]],
-["Yulieth Acevedo","+52 1 81 4028 5811",null,[
-["Termo camuflaje",690,"ju","Con asa y popote, 21:16","yulieth-acevedo-termo-camuflaje.jpg"]
-]],
-["Athziry💕","+52 1 81 2203 5065",null,[
-["Calcetines New Balance 10 pares",590,"mi","Ankle, blancas, logo rojo, 18:21","athziry-calcetines-new-balance.jpg"]
-]],
-["Ashley Solis","+52 1 81 1530 9437",null,[
-["Boxers NB",450,"ma","20:44, confirmado por Flaca en el grupo","ashley-solis-boxers-nb.jpg"]
-]],
-["Jenny Villasana","+52 1 81 3130 8220",null,[
-["Calcetines Champion 6 pares",350,"mi","Performance Cushion Quarter, blancas, 18:21","jenny-villasana-calcetines-champion.jpg"]
-]]
-];
-
-const $ = id => document.getElementById(id);
-const money = n => "$" + new Intl.NumberFormat("en-US",{
-  minimumFractionDigits:0,maximumFractionDigits:2
-}).format(n);
-const entries = value => Object.entries(value || {});
-const values = value => Object.values(value || {});
-const clone = value => JSON.parse(JSON.stringify(value));
-const cents = n => Math.round(Number(n || 0) * 100);
-const cleanSearch = value => String(value).normalize("NFD")
-  .replace(/[\u0300-\u036f]/g,"").toLowerCase();
-
-function phoneKey(phone){
-  const key = String(phone).replace(/\D/g,"");
-  if(key.length < 7 || key.length > 15)
-    throw Error("Escribe un teléfono válido de 7 a 15 dígitos.");
+<dialog id="dialog"></dialog>
+<script id="tracker-model">
+// All arithmetic uses integer cents. Calendar dates use Monterrey's local day.
+const WEEK_OPTIONS = [1, 3, 5, 7, 10, 13, 15];
+const INITIAL_WEEK = '2026-11-09';
+const INITIAL_LABEL = 'Semana del 9 al 15 de noviembre de 2026';
+const records = value => Object.entries(value || {});
+const list = value => Object.values(value || {});
+const cents = value => Math.round(Number(value || 0) * 100);
+const money = value => '$' + new Intl.NumberFormat('en-US', {maximumFractionDigits: 2}).format(value / 100);
+const normalize = value => String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+function validDate(value) {
+  return typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value) &&
+    !Number.isNaN(Date.parse(value + 'T12:00:00Z')) && new Date(value + 'T12:00:00Z').toISOString().slice(0,10) === value;
+}
+function addDays(date, days) {
+  const result = new Date(date + 'T12:00:00Z');
+  result.setUTCDate(result.getUTCDate() + days);
+  return result.toISOString().slice(0,10);
+}
+function monday(date) {
+  const day = new Date(date + 'T12:00:00Z').getUTCDay();
+  return addDays(date, -((day + 6) % 7));
+}
+function localDate(value = new Date()) {
+  const parts = new Intl.DateTimeFormat('en-US', {timeZone: 'America/Monterrey', year: 'numeric', month: '2-digit', day: '2-digit'}).formatToParts(new Date(value));
+  const part = type => parts.find(p => p.type === type).value;
+  return `${part('year')}-${part('month')}-${part('day')}`;
+}
+function readableDate(value) {
+  return new Intl.DateTimeFormat('es-MX', {day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC'}).format(new Date(value + 'T12:00:00Z'));
+}
+function weekLabel(start) {
+  return `Semana del ${readableDate(start)} al ${readableDate(addDays(start, 6))}`;
+}
+function phoneKey(value) {
+  const key = String(value).replace(/\D/g, '');
+  if (key.length < 7 || key.length > 15) throw Error('Escribe un teléfono válido de 7 a 15 dígitos.');
   return key;
 }
-function amount(value, optional=false){
-  if(value === "" || value === null || value === undefined){
-    if(optional) return null;
-    throw Error("Escribe un importe.");
+function parseAmount(value, optional = false) {
+  if (value === '' || value == null) {
+    if (optional) return null;
+    throw Error('Escribe un importe.');
   }
-  const n = Number(value);
-  if(!Number.isFinite(n) || n < 0 || n > 100000000 ||
-    Math.abs(n*100-Math.round(n*100)) > 0.000001)
-    throw Error("Usa un importe válido con un máximo de dos decimales.");
-  return n;
+  const number = Number(value);
+  if (!Number.isFinite(number) || number < 0 || number > 100000000 || Math.abs(number * 100 - Math.round(number * 100)) > 0.000001) {
+    throw Error('Escribe un importe válido con un máximo de dos decimales.');
+  }
+  return number;
 }
-function totals(person){
-  const total = values(person.items).reduce((s,i)=>s+cents(i.price),0);
-  const paid = values(person.payments).reduce((s,p)=>s+cents(p.amount),0);
-  return {total:total/100,paid:paid/100,balance:(total-paid)/100};
+function paymentDate(payment) {
+  if (validDate(payment.paidOn)) return payment.paidOn;
+  if (validDate(payment.date)) return payment.date;
+  if (payment.date && !Number.isNaN(Date.parse(payment.date))) return localDate(payment.date);
+  return null;
 }
-function totalLine(person){
-  const t = totals(person);
-  return `Total: ${money(t.total)} | Pagado: ${money(t.paid)} | Saldo: ${money(t.balance)}`;
-}
-function photoSource(photo){
-  if(!photo) return "";
-  if(/^data:image\/(?:jpeg|png|webp|gif);base64,[a-zA-Z0-9+/=\s]+$/.test(photo))
-    return photo;
-  if(/^[a-zA-Z0-9][a-zA-Z0-9_. -]*\.(?:jpg|jpeg|png|webp|gif)$/i.test(photo))
-    return "./images/" + encodeURIComponent(photo);
-  return "";
-}
-
-const seed = {weekLabel:initialWeek,currency:"MXN",people:{}};
-for(const [name,phone,note,items] of rows){
-  seed.people[phoneKey(phone)] = {
-    name,phone,note,items:Object.fromEntries(items.map((r,index)=>[
-      "item_" + String(index+1).padStart(3,"0"),
-      {name:r[0],price:r[1],date:dates[r[2]],detail:r[3],
-       flag:r[5] ?? null,photo:r[4] ?? null}
-    ])),payments:{}
+function migrateTracker(current) {
+  if (!current) return null;
+  const next = structuredClone(current);
+  if (next.schemaVersion >= 2) return next;
+  next.schemaVersion = 2;
+  next.currency = 'MXN';
+  next.activeWeek = validDate(next.activeWeek) ? next.activeWeek : INITIAL_WEEK;
+  next.weeks = next.weeks || {};
+  next.weeks[next.activeWeek] = next.weeks[next.activeWeek] || {
+    start: next.activeWeek, label: next.weekLabel || INITIAL_LABEL
   };
+  for (const person of list(next.people)) {
+    for (const item of list(person.items)) item.weekId = item.weekId || next.activeWeek;
+  }
+  return next;
 }
-
-// Comprobaciones de los datos iniciales.
-const seedPeople = values(seed.people);
-const seedCount = seedPeople.reduce((s,p)=>s+values(p.items).length,0);
-const seedTotal = seedPeople.reduce((s,p)=>s+cents(totals(p).total),0)/100;
-if(seedPeople.length!==19 || seedCount!==57 || seedTotal!==39625)
-  throw Error("Los datos iniciales no coinciden con los totales esperados.");
-const expected = {
-  "Sergio Leija":7930,"Fatima Zenon":6570,"Perla Valentin":4225,
-  "Mileny":2850,"👹 Orlando":2400,"Victor Mendoza":2090
+function account(person, activeWeek) {
+  const groups = {};
+  for (const [id, item] of records(person.items)) {
+    const week = item.weekId || activeWeek;
+    groups[week] = groups[week] || {week, total: 0, unknown: 0, items: [], installments: []};
+    groups[week].items.push({id, ...item});
+    groups[week].total += cents(item.price);
+    if (item.price == null) groups[week].unknown++;
+  }
+  const installments = [];
+  for (const group of list(groups)) {
+    const plan = person.plans?.[group.week];
+    const configured = plan && WEEK_OPTIONS.includes(Number(plan.count)) && validDate(plan.firstDue);
+    group.plan = configured ? plan : null;
+    const count = configured ? Number(plan.count) : 1;
+    const regular = Math.floor(group.total / count);
+    for (let index = 0; index < count; index++) {
+      const amount = index === count - 1 ? group.total - regular * (count - 1) : regular;
+      const installment = {
+        week: group.week, index, amount, paid: 0,
+        due: configured ? addDays(plan.firstDue, index * 7) : null
+      };
+      group.installments.push(installment);
+      installments.push(installment);
+    }
+  }
+  // Unscheduled legacy purchases remain payable, without invented overdue dates.
+  installments.sort((a,b) => (a.due || a.week).localeCompare(b.due || b.week) || a.week.localeCompare(b.week) || a.index-b.index);
+  const payments = records(person.payments).map(([id,p]) => ({id, ...p, paidOn: paymentDate(p)}));
+  payments.sort((a,b) => (a.paidOn || '').localeCompare(b.paidOn || '') || a.id.localeCompare(b.id));
+  let credit = 0;
+  for (const payment of payments) {
+    let remaining = cents(payment.amount);
+    for (const installment of installments) {
+      const applied = Math.min(remaining, installment.amount - installment.paid);
+      installment.paid += applied;
+      remaining -= applied;
+      if (remaining === 0) break;
+    }
+    credit += remaining;
+  }
+  const total = list(groups).reduce((sum,g) => sum+g.total,0);
+  const paid = payments.reduce((sum,p) => sum+cents(p.amount),0);
+  for (const group of list(groups)) {
+    group.balance = group.installments.reduce((sum,i) => sum+i.amount-i.paid,0);
+    group.remainingCount = group.installments.filter(i => i.amount > i.paid).length;
+  }
+  return {groups, installments, payments, total, paid, balance: Math.max(0,total-paid), credit};
+}
+function collectionStatus(result, start, today) {
+  const end = addDays(start,6);
+  const reported = result.payments.filter(p => p.paidOn && p.paidOn >= start && p.paidOn <= end).reduce((sum,p)=>sum+cents(p.amount),0);
+  const scheduled = result.installments.filter(i => i.due && i.due >= start && i.due <= end);
+  const pending = scheduled.reduce((sum,i)=>sum+i.amount-i.paid,0);
+  const overdue = result.installments.filter(i => i.due && i.due < today).reduce((sum,i)=>sum+i.amount-i.paid,0);
+  return {reported, pending, overdue, scheduled: scheduled.length};
+}
+function accountMessage(person, group, label) {
+  if (!group) throw Error('No hay compras en la semana seleccionada.');
+  const lines = ['WD Ventas Men', person.name, '', 'Compras de semana · ' + label];
+  for (const item of group.items) lines.push(`• ${item.name} — ${item.price == null ? 'precio por confirmar' : money(cents(item.price))}`);
+  lines.push('', 'Total: ' + money(group.total));
+  if (group.unknown) lines.push('Hay artículos con precio por confirmar.');
+  if (group.plan) {
+    const count = Number(group.plan.count);
+    if (count === 1) lines.push('Plan de pago: al contado');
+    else {
+      const first = group.installments[0].amount;
+      const last = group.installments[count-1].amount;
+      lines.push(`Plan de pago: ${count} pagos semanales`);
+      lines.push(first === last ? `${count} pagos de ${money(first)}` : `${count-1} pagos de ${money(first)} y un último pago de ${money(last)}`);
+    }
+    lines.push('Primer pago: ' + readableDate(group.plan.firstDue));
+  }
+  if (person.note) lines.push('',person.note);
+  return lines.join('\n');
+}
+</script>
+<script type="module">
+const firebaseConfig = {
+  apiKey: 'AIzaSyCcf5ei9bLRBb_W_ale4H7WJq4KJxFrGQU',
+  authDomain: 'wd-ventas-men.firebaseapp.com',
+  databaseURL: 'https://wd-ventas-men-default-rtdb.firebaseio.com',
+  projectId: 'wd-ventas-men',
+  storageBucket: 'wd-ventas-men.firebasestorage.app',
+  messagingSenderId: '746205817490',
+  appId: '1:746205817490:web:093da67597bb776cdc144b'
 };
-for(const [name,value] of entries(expected)){
-  if(totals(seedPeople.find(p=>p.name===name)).total!==value)
-    throw Error("Subtotal inicial incorrecto: "+name);
+const $ = id => document.getElementById(id);
+let database, ref, get, set, push, runTransaction, onValue;
+let data = null;
+const cards = new Map();
+const today = () => localDate();
+const initialCollection = monday(today());
+$('collection-week').value = today() === initialCollection ? addDays(initialCollection,-7) : initialCollection;
+$('quick-payment').elements.date.value = today();
+function notice(message) { $('notice').textContent = message; }
+function failure(error) {
+  console.error(error);
+  notice(/permission|denied/i.test(String(error.message)) ? 'Firebase rechazó la operación. Revisa los permisos de la base de datos.' : error.message || String(error));
 }
-
-function el(tag,text,className){
+function element(tag, text, className) {
   const node = document.createElement(tag);
-  if(text!==undefined && text!==null) node.textContent=text;
-  if(className) node.className=className;
+  if (text != null) node.textContent = text;
+  if (className) node.className = className;
   return node;
 }
-function notify(message){ $("notice").textContent=message; }
-function fail(error){
-  console.error(error);
-  const msg = String(error?.message || error);
-  notify(/permission|denied/i.test(msg)
-    ? "Firebase rechazó la operación. Revisa los permisos de lectura y escritura."
-    : msg);
-}
-function button(text,fn){
-  const b=el("button",text); b.type="button";
-  b.addEventListener("click",async()=>{
-    if(b.disabled) return;
-    b.disabled=true;
-    try{await fn();}catch(e){fail(e);}
-    finally{b.disabled=false;}
+function button(label, action) {
+  const node = element('button', label);
+  node.type = 'button';
+  node.addEventListener('click', async () => {
+    node.disabled = true;
+    try { await action(); } catch (error) { failure(error); }
+    finally { node.disabled = false; }
   });
-  return b;
+  return node;
 }
-function field(label,type="text",required=false){
-  const l=el("label",label);
-  const input=el(type==="textarea" ? "textarea":"input");
-  if(type!=="textarea") input.type=type;
-  input.required=required;
-  if(type==="number"){input.min="0";input.step="0.01";}
-  l.append(input);
-  return {label:l,input};
+function field(label, type = 'text', required = false) {
+  const wrapper = element('label',label);
+  const input = element(type === 'textarea' ? 'textarea' : 'input');
+  if (type !== 'textarea') input.type = type;
+  input.required = required;
+  if (type === 'number') { input.min = '0'; input.step = '.01'; }
+  wrapper.append(input);
+  return {wrapper,input};
 }
-function submitForm(form,fn){
-  form.addEventListener("submit",async event=>{
+function selectField(label, options) {
+  const wrapper = element('label',label);
+  const input = element('select');
+  for (const [value,text] of options) { const option = element('option',text); option.value=value; input.append(option); }
+  wrapper.append(input);
+  return {wrapper,input};
+}
+function submitButton(label) { const node = element('button',label); node.type = 'submit'; return node; }
+function handleSubmit(form, action) {
+  form.addEventListener('submit',async event => {
     event.preventDefault();
-    const buttons=[...form.querySelectorAll("button")];
-    buttons.forEach(b=>b.disabled=true);
-    try{await fn();}catch(e){fail(e);}
-    finally{buttons.forEach(b=>b.disabled=false);}
+    const buttons = [...form.querySelectorAll('button')];
+    buttons.forEach(node => node.disabled = true);
+    try { await action(); } catch (error) { failure(error); }
+    finally { buttons.forEach(node => node.disabled = false); }
   });
 }
-function submitButton(text){
-  const b=el("button",text); b.type="submit"; return b;
+function person(key) {
+  if (!data?.people?.[key]) throw Error('La persona ya no existe.');
+  return data.people[key];
 }
-function confirmAction(text,labelValue){
-  return new Promise(resolve=>{
-    const dialog=$("confirmation");
-    $("confirmation-text").textContent=text;
-    $("confirmation-label").hidden=labelValue===undefined;
-    $("confirmation-input").value=labelValue ?? "";
-    dialog.returnValue="";
-    dialog.addEventListener("close",()=>resolve({
-      ok:dialog.returnValue==="confirm",
-      value:$("confirmation-input").value.trim()
-    }),{once:true});
+function item(key,id) {
+  const value = person(key).items?.[id];
+  if (!value) throw Error('El artículo ya no existe.');
+  return value;
+}
+function weekText(id) { return data.weeks?.[id]?.label || (validDate(id) ? weekLabel(id) : id); }
+function path(key) { return 'tracker/people/' + key; }
+async function changePerson(key, mutate) {
+  // A transaction prevents a concurrent delete/rename from recreating a partial customer.
+  const result = await runTransaction(ref(database,path(key)), current => {
+    if (!current) return;
+    return mutate(current);
+  }, {applyLocally:false});
+  if (!result.committed) throw Error('El registro cambió. Revisa los datos y vuelve a intentarlo.');
+}
+function confirmDialog(text, fields = []) {
+  return new Promise(resolve => {
+    const dialog = $('dialog');
+    dialog.replaceChildren();
+    const form = element('form'); form.method = 'dialog';
+    form.append(element('p',text),...fields);
+    const actions = element('div',null,'actions');
+    const cancel = submitButton('Cancelar'); cancel.value = 'cancel'; cancel.formNoValidate = true;
+    const confirm = submitButton('Confirmar'); confirm.value = 'confirm';
+    actions.append(cancel,confirm); form.append(actions); dialog.append(form);
+    dialog.returnValue = '';
+    dialog.addEventListener('close', () => resolve(dialog.returnValue === 'confirm'), {once:true});
     dialog.showModal();
-    $("confirm-button").focus();
   });
 }
-function editor(host,label,getValue,save,type="text",optional=false){
-  const wrapper=el("div","", "inline-editor");
-  const launch=button(label,()=>{
-    control.input.value=getValue() ?? "";
-    form.hidden=false; launch.hidden=true; control.input.focus();
+function messageDialog(text) {
+  const dialog = $('dialog'); dialog.replaceChildren();
+  const message = field('Mensaje de WhatsApp','textarea'); message.input.value = text;
+  const link = element('a','Abrir WhatsApp'); link.target = '_blank'; link.rel = 'noopener noreferrer';
+  const updateLink = () => { link.href = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(message.input.value); };
+  updateLink(); message.input.addEventListener('input',updateLink);
+  const actions = element('div',null,'actions'); actions.append(link,button('Cerrar',()=>dialog.close()));
+  dialog.append(message.wrapper,actions); dialog.showModal();
+}
+function inlineEditor(host,label,read,save,type='text',optional=false) {
+  const wrapper = element('div',null,'editor');
+  const form = element('form'); form.hidden = true;
+  const control = field(label,type,!optional);
+  const open = button(label,()=>{ control.input.value=read() ?? ''; form.hidden=false; open.hidden=true; control.input.focus(); });
+  const close = () => {form.hidden=true;open.hidden=false;};
+  const actions = element('div',null,'actions'); actions.append(submitButton('Guardar'),button('Cancelar',close));
+  form.append(control.wrapper,actions);
+  handleSubmit(form,async()=>{await save(control.input.value);close();});
+  wrapper.append(open,form); host.append(wrapper);
+}
+function imageSource(value) {
+  if (!value) return '';
+  if (/^data:image\/(jpeg|png|webp|gif);base64,[A-Za-z0-9+/=\s]+$/.test(value)) return value;
+  if (/^[A-Za-z0-9][A-Za-z0-9_. -]*\.(jpg|jpeg|png|webp|gif)$/i.test(value)) return './images/' + encodeURIComponent(value);
+  return '';
+}
+async function uploadPhoto(file) {
+  if (!file) return null;
+  if (!/^image\/(jpeg|png|webp|gif)$/.test(file.type)) throw Error('Selecciona una foto JPG, PNG, WEBP o GIF.');
+  if (file.size > 20*1024*1024) throw Error('Selecciona una foto de menos de 20 MB.');
+  const url = URL.createObjectURL(file);
+  try {
+    const image = new Image(); image.src=url; await image.decode();
+    const scale = Math.min(1,1600/Math.max(image.width,image.height));
+    const canvas = document.createElement('canvas');
+    canvas.width=Math.max(1,Math.round(image.width*scale)); canvas.height=Math.max(1,Math.round(image.height*scale));
+    const context=canvas.getContext('2d'); context.fillStyle='white'; context.fillRect(0,0,canvas.width,canvas.height);
+    context.drawImage(image,0,0,canvas.width,canvas.height);
+    return canvas.toDataURL('image/jpeg',.85);
+  } finally { URL.revokeObjectURL(url); }
+}
+function exportData() {
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob); const link=element('a');
+  link.href=url;link.download=`wd-ventas-men-${today()}.json`;link.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+async function registerPayment(key,value,date,note) {
+  const amount=parseAmount(value);
+  if (amount <= 0) throw Error('El pago debe ser mayor que cero.');
+  if (!validDate(date) || date > today()) throw Error('Selecciona la fecha real del pago, sin fechas futuras.');
+  const id=push(ref(database,path(key)+'/payments')).key;
+  await changePerson(key,current=>{
+    current.payments=current.payments || {};
+    current.payments[id]={amount,paidOn:date,date:new Date().toISOString(),note:note.trim()};
+    return current;
   });
-  const form=el("form");form.hidden=true;
-  const control=field(label,type,!optional);
-  const actions=el("div","", "actions");
-  const close=()=>{form.hidden=true;launch.hidden=false;};
-  actions.append(submitButton("Guardar"),button("Cancelar",close));
-  form.append(control.label,actions);
-  submitForm(form,async()=>{
-    await save(control.input.value);
-    close();
+  notice('Pago registrado.');
+}
+function createItem(key,id) {
+  const node=element('article',null,'item');
+  const photo=element('div','Sin foto','photo');
+  const title=element('strong'); const price=element('p',null,'item-price'); const date=element('small');
+  const detail=element('p',null,'detail');const flag=element('p',null,'flag');
+  const actions=element('div',null,'actions');
+  node.append(photo,title,price,date,detail,flag,actions);
+  async function edit(fieldName,value) {
+    await changePerson(key,current=>{
+      if (!current.items?.[id]) return;
+      current.items[id][fieldName]=value;
+      return current;
+    });
+  }
+  inlineEditor(node,'Editar nombre',()=>item(key,id).name,value=>{
+    if(!value.trim())throw Error('Escribe el nombre del artículo.');
+    return edit('name',value.trim());
   });
-  wrapper.append(launch,form);host.append(wrapper);
-}
-
-async function readPhoto(file){
-  if(!file) return null;
-  if(!/^image\/(jpeg|png|webp|gif)$/.test(file.type))
-    throw Error("Selecciona una imagen JPG, PNG, WEBP o GIF.");
-  if(file.size>20*1024*1024)
-    throw Error("La imagen debe pesar menos de 20 MB.");
-  const url=URL.createObjectURL(file);
-  try{
-    const image=new Image();image.src=url;
-    await image.decode();
-    const ratio=Math.min(1,1600/Math.max(image.width,image.height));
-    const canvas=document.createElement("canvas");
-    canvas.width=Math.max(1,Math.round(image.width*ratio));
-    canvas.height=Math.max(1,Math.round(image.height*ratio));
-    const ctx=canvas.getContext("2d");
-    ctx.fillStyle="#ffffff";ctx.fillRect(0,0,canvas.width,canvas.height);
-    ctx.drawImage(image,0,0,canvas.width,canvas.height);
-    return canvas.toDataURL("image/jpeg",.85);
-  }finally{URL.revokeObjectURL(url);}
-}
-
-let data=null,ready=false,db;
-let ref,set,update,remove,push,runTransaction,onValue,get;
-const cards=new Map();
-
-function personAt(key){
-  const p=data?.people?.[key];
-  if(!p) throw Error("Esta persona ya no existe. Actualiza la página.");
-  return p;
-}
-function itemAt(key,id){
-  const item=personAt(key).items?.[id];
-  if(!item) throw Error("Este artículo ya no existe.");
-  return item;
-}
-const personPath=key=>"tracker/people/"+key;
-function write(path,value){return set(ref(db,path),value);}
-function shareMessage(person){
-  const week=data.weekLabel===initialWeek
-    ? "Semana 9-15 nov" : (data.weekLabel || "Semana actual");
-  return [
-    "WD Ventas Men — "+week,
-    person.name,
-    person.phone,
-    ...values(person.items).map(i=>
-      `• ${i.name} — ${i.price==null ? "precio por confirmar":money(i.price)}`),
-    totalLine(person),
-    ...(person.note ? [person.note]:[])
-  ].join("\n");
-}
-function exportData(){
-  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
-  const url=URL.createObjectURL(blob);
-  const a=el("a");a.href=url;
-  a.download="wd-ventas-men-"+new Date().toISOString().slice(0,10)+".json";
-  a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
-}
-
-function itemView(key,id){
-  const node=el("article","", "item");
-  const photo=el("div","Sin foto","photo");
-  const name=el("div","", "item-name");
-  const price=el("div","", "item-price");
-  const date=el("small");
-  const detail=el("div","", "detail");
-  const flag=el("div","", "flag");
-  const actions=el("div","", "actions");
-  node.append(photo,name,price,date,detail,flag,actions);
-  const base=personPath(key)+"/items/"+id;
-  editor(node,"Editar nombre",()=>itemAt(key,id).name,async value=>{
-    if(!value.trim())throw Error("Escribe el nombre del artículo.");
-    itemAt(key,id);
-    await write(base+"/name",value.trim());
+  inlineEditor(node,'Editar precio',()=>item(key,id).price,value=>edit('price',parseAmount(value,true)),'number',true);
+  const file=element('input');file.type='file';file.accept='image/jpeg,image/png,image/webp,image/gif';file.hidden=true;
+  file.addEventListener('change',async()=>{
+    try { const photo=await uploadPhoto(file.files[0]);if(photo)await edit('photo',photo); }
+    catch(error){failure(error);} finally{file.value='';}
   });
-  editor(node,"Editar precio",()=>itemAt(key,id).price,async value=>{
-    itemAt(key,id);
-    await write(base+"/price",amount(value,true));
-  },"number",true);
-  const upload=el("input");upload.type="file";
-  upload.accept="image/jpeg,image/png,image/webp,image/gif";upload.hidden=true;
-  upload.addEventListener("change",async()=>{
-    try{
-      const value=await readPhoto(upload.files[0]);
-      if(value){itemAt(key,id);await write(base+"/photo",value);}
-    }catch(e){fail(e);}finally{upload.value="";}
-  });
-  actions.append(
-    button("Cambiar foto",()=>upload.click()),
-    button("Quitar",async()=>{itemAt(key,id);await remove(ref(db,base));})
-  );
-  node.append(upload);
+  actions.append(button('Cambiar foto',()=>file.click()),button('Quitar',async()=>{
+    if (!await confirmDialog('¿Quitar este artículo y recalcular su plan de pago?')) return;
+    await changePerson(key,current=>{if(current.items)delete current.items[id];return current;});
+  }));node.append(file);
   let previousPhoto;
-  return {
-    node,
-    refresh(item){
-      name.textContent=item.name;
-      price.textContent=item.price==null ? "precio por confirmar":money(item.price);
-      date.textContent=item.date || "";
-      detail.textContent=item.detail || "";
-      flag.textContent=item.flag || "";flag.hidden=!item.flag;
-      if(previousPhoto!==item.photo){
-        previousPhoto=item.photo;
-        const src=photoSource(item.photo);
-        photo.replaceChildren(el("span","Sin foto"));
-        if(src){
-          const img=el("img");img.alt=item.name;img.loading="lazy";
-          img.addEventListener("error",()=>photo.replaceChildren(el("span","Sin foto")));
-          img.src=src;photo.replaceChildren(img);
-        }
-      }
-      const img=photo.querySelector("img");
-      if(img)img.alt=item.name;
+  return {node,refresh(value){
+    title.textContent=value.name;price.textContent=value.price==null?'precio por confirmar':money(cents(value.price));
+    date.textContent=value.date || '';detail.textContent=value.detail || '';flag.textContent=value.flag || '';flag.hidden=!value.flag;
+    if(previousPhoto!==value.photo){
+      previousPhoto=value.photo;photo.replaceChildren(element('span','Sin foto'));
+      const source=imageSource(value.photo);
+      if(source){const image=element('img');image.alt=value.name;image.loading='lazy';image.src=source;
+        image.addEventListener('error',()=>photo.replaceChildren(element('span','Sin foto')));photo.replaceChildren(image);}
     }
-  };
+  }};
 }
-
-function personView(key){
-  const node=el("article","", "card");
-  const head=el("div","", "person-head");
-  const toggle=el("button","", "person-name");
-  toggle.type="button";toggle.setAttribute("aria-expanded","false");
-  const total=el("span","", "person-total");
-  head.append(toggle,total);
-  const phone=el("div","", "muted");
-  const balance=el("div","", "balance");
-  const actions=el("div","", "actions");
-  const note=el("div","", "note");
-  const body=el("div","", "body");body.hidden=true;
-  const itemContainer=el("div","", "items");
-  const itemViews=new Map();
-  const noItems=el("p","Sin artículos.","muted");
-  body.append(itemContainer,noItems);
-  toggle.addEventListener("click",()=>{
-    body.hidden=!body.hidden;
-    toggle.setAttribute("aria-expanded",String(!body.hidden));
+function createCard(key) {
+  const node=element('article',null,'card');
+  const name=button('',()=>{body.hidden=!body.hidden;name.setAttribute('aria-expanded',String(!body.hidden));});name.className='name';name.setAttribute('aria-expanded','false');
+  const phone=element('div',null,'muted'), summary=element('p'), badges=element('div'), note=element('p',null,'note');
+  const actions=element('div',null,'actions');
+  const body=element('div',null,'body');body.hidden=true;
+  node.append(name,phone,summary,badges,note,actions,body);
+  inlineEditor(actions,'Editar nombre',()=>person(key).name,value=>{
+    if(!value.trim())throw Error('Escribe un nombre.');
+    return changePerson(key,current=>({...current,name:value.trim()}));
   });
-  node.append(head,phone,balance,actions,note,body);
-
-  editor(actions,"Editar nombre",()=>personAt(key).name,async value=>{
-    if(!value.trim())throw Error("Escribe un nombre.");
-    personAt(key);
-    await write(personPath(key)+"/name",value.trim());
-  });
-  editor(actions,"Editar teléfono",()=>personAt(key).phone,async value=>{
-    const newKey=phoneKey(value),newPhone=value.trim();
-    if(newKey===key){
-      await write(personPath(key)+"/phone",newPhone);return;
-    }
-    const result=await runTransaction(ref(db,"tracker/people"),current=>{
+  inlineEditor(actions,'Editar teléfono',()=>person(key).phone,async value=>{
+    const newKey=phoneKey(value);
+    if(newKey===key){await changePerson(key,current=>({...current,phone:value.trim()}));return;}
+    const result=await runTransaction(ref(database,'tracker/people'),current=>{
       if(!current?.[key] || current[newKey])return;
-      const next={...current};
-      next[newKey]={...current[key],phone:newPhone};
-      delete next[key];return next;
+      current[newKey]={...current[key],phone:value.trim()};delete current[key];return current;
     },{applyLocally:false});
-    if(!result.committed)
-      throw Error("No se pudo cambiar el teléfono: ya existe o la persona fue eliminada.");
-  },"tel");
-  actions.append(
-    button("Compartir por WhatsApp",()=>{
-      const text=shareMessage(personAt(key));
-      window.open("https://api.whatsapp.com/send?text="+encodeURIComponent(text),
-        "_blank","noopener,noreferrer");
-    }),
-    button("Eliminar",async()=>{
-      const p=personAt(key);
-      if((await confirmAction(`¿Eliminar a ${p.name} y todos sus artículos?`)).ok)
-        await remove(ref(db,personPath(key)));
+    if(!result.committed)throw Error('Ese teléfono ya existe o la persona fue eliminada.');
+  },'tel');
+  actions.append(button('Eliminar',async()=>{
+    if(await confirmDialog(`¿Eliminar a ${person(key).name} y todos sus artículos, pagos y planes?`))await set(ref(database,path(key)),null);
+  }));
+  inlineEditor(node,'Editar nota',()=>person(key).note,value=>changePerson(key,current=>({...current,note:value.trim() || null})),'textarea',true);
+
+  const menu=element('details',null,'menu');menu.append(element('summary','Mensaje de WhatsApp'));
+  const menuItems=element('div',null,'menu-items');menu.append(menuItems);actions.prepend(menu);
+  const purchaseWeek=selectField('Compras de semana',[]);
+  body.append(purchaseWeek.wrapper);
+  const weekAccount=element('div');body.append(weekAccount);
+  const items=element('div',null,'grid');body.append(items);
+  const itemViews=new Map();
+  function chosenGroup(){return account(person(key),data.activeWeek).groups[purchaseWeek.input.value];}
+  const overdueButton=button('Recordatorio de pago vencido',()=>{
+    menu.open=false;messageDialog('Te espero con tu pago');
+  });
+  menuItems.append(
+    button('Resumen de cuenta',()=>{menu.open=false;messageDialog(accountMessage(person(key),chosenGroup(),weekText(purchaseWeek.input.value)));}),
+    button('Recordatorio de pago',()=>{menu.open=false;messageDialog('Te espero con tu pago');}),
+    overdueButton,
+    button('Confirmación de pago',()=>{
+      const result=account(person(key),data.activeWeek), latest=result.payments.at(-1);
+      if(!latest)throw Error('Todavía no hay pagos registrados.');
+      menu.open=false;
+      const unpriced=list(result.groups).some(group=>group.unknown>0);
+      const closing=unpriced?`Quedan artículos con precio por confirmar. Saldo de los artículos con precio: ${money(result.balance)}.`:
+        (result.balance===0?'Tu cuenta está liquidada. ¡Gracias!':`Tu saldo pendiente es de ${money(result.balance)}. ¡Gracias!`);
+      messageDialog(`Hola, ${person(key).name}. Ya quedó registrado tu pago de ${money(cents(latest.amount))}. `+closing);
     })
   );
-  editor(node,"Editar nota",()=>personAt(key).note,async value=>{
-    personAt(key);await write(personPath(key)+"/note",value.trim() || null);
-  },"textarea",true);
-
-  const addSection=el("section","", "section");
-  addSection.append(el("h3","Agregar artículo"));
-  const addForm=el("form");
-  const product=field("Nombre del producto","text",true);
-  const cost=field("Precio (opcional)","number");
-  const when=field("Fecha (opcional)");
-  const details=field("Detalle (opcional)");
-  const picture=field("Foto (opcional)","file");
-  picture.input.accept="image/jpeg,image/png,image/webp,image/gif";
-  const pair=el("div","", "two");pair.append(cost.label,when.label);
-  addForm.append(product.label,pair,details.label,picture.label,submitButton("Agregar artículo"));
-  submitForm(addForm,async()=>{
-    const name=product.input.value.trim();
-    if(!name)throw Error("Escribe el nombre del producto.");
-    const item={
-      name,price:amount(cost.input.value,true),
-      date:when.input.value.trim(),detail:details.input.value.trim(),
-      flag:null,photo:await readPhoto(picture.input.files[0])
-    };
-    personAt(key);
-    await set(push(ref(db,personPath(key)+"/items")),item);
-    addForm.reset();
+  const planSection=element('section',null,'section');planSection.append(element('h3','Plan de pago de estas compras'));
+  const planForm=element('form');
+  const count=selectField('Plan de pago',[['','Seleccionar plan'],...WEEK_OPTIONS.map(n=>[String(n),n===1?'Al contado':`${n} pagos semanales`])]);count.input.required=true;
+  const firstDue=field('Fecha del primer pago','date',true);
+  const planInfo=element('p',null,'muted');
+  const planRow=element('div',null,'row');planRow.append(count.wrapper,firstDue.wrapper);
+  planForm.append(planRow,submitButton('Guardar plan'));planSection.append(planForm,planInfo);body.append(planSection);
+  let planDirty=false;planForm.addEventListener('input',()=>planDirty=true);planForm.addEventListener('change',()=>planDirty=true);
+  handleSubmit(planForm,async()=>{
+    const week=purchaseWeek.input.value, selected=Number(count.input.value), date=firstDue.input.value;
+    if(!WEEK_OPTIONS.includes(selected) || !validDate(date))throw Error('Selecciona el plan y la fecha del primer pago.');
+    const group=chosenGroup();
+    if(!group || group.unknown || group.total<=0)throw Error('Confirma todos los precios antes de establecer el plan.');
+    if(group.plan && !await confirmDialog('¿Actualizar el plan y recalcular sus fechas y pagos pendientes?'))return;
+    await changePerson(key,current=>{current.plans=current.plans || {};current.plans[week]={count:selected,firstDue:date};return current;});
+    planDirty=false;refresh(person(key));notice('Plan guardado.');
   });
-  addSection.append(addForm);body.append(addSection);
 
-  const paymentSection=el("section","", "section");
-  paymentSection.append(el("h3","Pagos"));
-  const payments=el("div");
-  const paymentForm=el("form");
-  const payAmount=field("Monto","number",true);payAmount.input.min=".01";
-  const payNote=field("Nota (opcional)");
-  paymentForm.append(payAmount.label,payNote.label,submitButton("Registrar pago"));
-  submitForm(paymentForm,async()=>{
-    const value=amount(payAmount.input.value);
-    if(value<=0)throw Error("El pago debe ser mayor que cero.");
-    personAt(key);
-    await set(push(ref(db,personPath(key)+"/payments")),{
-      amount:value,note:payNote.input.value.trim(),date:new Date().toISOString()
-    });
-    paymentForm.reset();
-  });
-  paymentSection.append(payments,paymentForm);body.append(paymentSection);
-
-  return {
-    node,
-    refresh(person){
-      const t=totals(person);
-      toggle.textContent=person.name;
-      phone.textContent=person.phone;
-      total.textContent=money(t.total);
-      balance.textContent=`Pagado: ${money(t.paid)} · Saldo: ${money(t.balance)}`;
-      note.textContent=person.note || "";note.hidden=!person.note;
-      const current=person.items || {};
-      for(const [id,view] of itemViews){
-        if(!Object.hasOwn(current,id)){view.node.remove();itemViews.delete(id);}
+  const addSection=element('section',null,'section');addSection.append(element('h3','Agregar artículo a la semana seleccionada'));
+  const addForm=element('form');const product=field('Producto','text',true),price=field('Precio (opcional)','number'),date=field('Fecha o referencia (opcional)'),detail=field('Detalle (opcional)'),photo=field('Foto (opcional)','file');
+  photo.input.accept='image/jpeg,image/png,image/webp,image/gif';
+  addForm.append(product.wrapper,price.wrapper,date.wrapper,detail.wrapper,photo.wrapper,submitButton('Agregar artículo'));
+  handleSubmit(addForm,async()=>{
+    const week=purchaseWeek.input.value;
+    if(!product.input.value.trim())throw Error('Escribe el nombre del producto.');
+    if(chosenGroup()?.plan && !await confirmDialog('Estas compras ya tienen un plan. ¿Agregar el artículo y recalcular los importes de ese plan?'))return;
+    const value={name:product.input.value.trim(),price:parseAmount(price.input.value,true),date:date.input.value.trim(),detail:detail.input.value.trim(),photo:await uploadPhoto(photo.input.files[0]),flag:null,weekId:week};
+    const id=push(ref(database,path(key)+'/items')).key;
+    await changePerson(key,current=>{current.items=current.items || {};current.items[id]=value;return current;});addForm.reset();
+  });addSection.append(addForm);body.append(addSection);
+  const history=element('section',null,'section');body.append(history);
+  const paymentForm=element('form');const amount=field('Monto','number',true),paidOn=field('Fecha del pago','date',true),paymentNote=field('Nota (opcional)');paidOn.input.value=today();
+  paymentForm.append(element('h3','Registrar pago'),amount.wrapper,paidOn.wrapper,paymentNote.wrapper,submitButton('Registrar pago'));
+  handleSubmit(paymentForm,async()=>{await registerPayment(key,amount.input.value,paidOn.input.value,paymentNote.input.value);amount.input.value='';paymentNote.input.value='';});body.append(paymentForm);
+  purchaseWeek.input.addEventListener('change',()=>{planDirty=false;refresh(person(key));});
+  let selectedActiveWeek;
+  function refresh(value){
+    const result=account(value,data.activeWeek),collection=monday($('collection-week').value || today());
+    const status=collectionStatus(result,collection,today());
+    name.textContent=value.name;phone.textContent=value.phone;
+    summary.textContent=`Total: ${money(result.total)} · Pagado: ${money(result.paid)} · Saldo: ${money(result.balance)}`+(result.credit?` · A favor: ${money(result.credit)}`:'');
+    note.textContent=value.note || '';note.hidden=!value.note;badges.replaceChildren();
+    badges.append(element('span',status.reported?`Pago registrado esta semana: ${money(status.reported)}`:'Sin pago registrado esta semana','badge'));
+    if(list(result.groups).some(group=>group.unknown>0))badges.append(element('span','Hay precios por confirmar','badge'));
+    else if(!list(result.groups).length)badges.append(element('span','Sin compras','badge'));
+    else if(result.balance===0)badges.append(element('span','Cuenta liquidada','badge'));
+    else if(status.scheduled)badges.append(element('span',status.pending?`Pendiente de esta semana: ${money(status.pending)}`:'Pago de esta semana cubierto','badge'));
+    else badges.append(element('span','Sin vencimiento programado esta semana','badge'));
+    if(status.overdue)badges.append(element('span',`Vencido: ${money(status.overdue)}`,'badge'));
+    overdueButton.hidden=status.overdue===0;
+    const selected=purchaseWeek.input.value;
+    const weeks=[...new Set([data.activeWeek,...Object.keys(result.groups)])].sort().reverse();
+    purchaseWeek.input.replaceChildren();
+    for(const week of weeks){const option=element('option',weekText(week));option.value=week;purchaseWeek.input.append(option);}
+    purchaseWeek.input.value=weeks.includes(selected)?selected:data.activeWeek;
+    if(selectedActiveWeek && selectedActiveWeek!==data.activeWeek){purchaseWeek.input.value=data.activeWeek;planDirty=false;}
+    selectedActiveWeek=data.activeWeek;
+    const group=result.groups[purchaseWeek.input.value];
+    weekAccount.textContent=group?`Compras: ${money(group.total)} · Pendiente de esta semana de compras: ${money(group.balance)}`:'Sin compras en esta semana.';
+    const visibleItems=Object.fromEntries((group?.items || []).map(item=>[item.id,item]));
+    for(const [id,view] of itemViews){if(!visibleItems[id]){view.node.remove();itemViews.delete(id);}}
+    for(const [id,value] of records(visibleItems)){let view=itemViews.get(id);if(!view){view=createItem(key,id);itemViews.set(id,view);items.append(view.node);}view.refresh(value);}
+    if(!planDirty){count.input.value=group?.plan?.count || '';firstDue.input.value=group?.plan?.firstDue || '';}
+    planInfo.replaceChildren();
+    if(group?.plan){
+      const unpaid=group.installments.filter(i=>i.amount>i.paid);
+      const overdue=unpaid.filter(i=>i.due<today()).length;
+      planInfo.append(element('p',`${unpaid.length} pagos pendientes${overdue?` (${overdue} vencidos)`:''}. Último vencimiento programado: ${readableDate(group.installments.at(-1).due)}.`));
+      if(unpaid.length){
+        const lastDue=unpaid.at(-1).due;
+        const weeksLeft=Math.max(0,Math.ceil((Date.parse(lastDue+'T12:00:00Z')-Date.parse(today()+'T12:00:00Z'))/(7*86400000)));
+        planInfo.append(element('p',`${weeksLeft} semanas de calendario hasta el último vencimiento pendiente.`));
       }
-      for(const [id,item] of entries(current)){
-        let view=itemViews.get(id);
-        if(!view){
-          view=itemView(key,id);itemViews.set(id,view);itemContainer.append(view.node);
-        }
-        view.refresh(item);
-      }
-      noItems.hidden=entries(current).length>0;
-      payments.replaceChildren();
-      for(const [id,payment] of entries(person.payments)){
-        const row=el("div","", "payment");
-        const text=el("div");
-        text.append(el("strong",money(payment.amount)));
-        let dateText=payment.date || "";
-        const parsed=new Date(dateText);
-        if(dateText && !Number.isNaN(parsed.getTime()))
-          dateText=new Intl.DateTimeFormat("es-MX",{
-            dateStyle:"medium",timeStyle:"short",timeZone:"America/Monterrey"
-          }).format(parsed);
-        text.append(el("div",[dateText,payment.note].filter(Boolean).join(" · ")));
-        row.append(text,button("Quitar pago",async()=>{
-          personAt(key);
-          await remove(ref(db,personPath(key)+"/payments/"+id));
-        }));
-        payments.append(row);
-      }
-      if(!entries(person.payments).length)payments.append(el("p","Sin pagos registrados.","muted"));
+      const table=element('table');
+      const header=element('tr');for(const text of ['Pago','Vence','Importe','Pendiente'])header.append(element('th',text));table.append(header);
+      for(const installment of group.installments){const row=element('tr');for(const text of [installment.index+1,readableDate(installment.due),money(installment.amount),money(installment.amount-installment.paid)])row.append(element('td',text));table.append(row);}planInfo.append(table);
+    }else planInfo.textContent='Selecciona un plan y la fecha del primer pago para calcular vencimientos.';
+    history.replaceChildren(element('h3','Historial por semana'));
+    const table=element('table');const header=element('tr');for(const text of ['Compras de semana','Total','Pendiente'])header.append(element('th',text));table.append(header);
+    for(const group of list(result.groups).sort((a,b)=>a.week.localeCompare(b.week))){const row=element('tr');for(const text of [weekText(group.week),money(group.total),money(group.balance)])row.append(element('td',text));table.append(row);}
+    history.append(table,element('h3','Pagos registrados'));
+    for(const payment of [...result.payments].reverse()){
+      const row=element('div',null,'payment');row.append(element('span',`${payment.paidOn?readableDate(payment.paidOn):'Fecha por confirmar'} · ${money(cents(payment.amount))}${payment.note?' · '+payment.note:''} `),button('Quitar pago',async()=>{
+        if(await confirmDialog('¿Quitar este pago y recalcular el saldo?'))await changePerson(key,current=>{if(current.payments)delete current.payments[payment.id];return current;});
+      }));history.append(row);
     }
-  };
+  }
+  return {node,refresh};
 }
-
+function refreshPaymentDropdown(){
+  const select=$('quick-payment').elements.person,selected=select.value;
+  const query=normalize($('payment-search').value);
+  select.replaceChildren();const empty=element('option','Seleccionar persona');empty.value='';select.append(empty);
+  for(const [key,value] of records(data?.people).sort((a,b)=>a[1].name.localeCompare(b[1].name,'es'))){
+    if(query && !normalize(value.name+' '+value.phone).includes(query) && !key.includes(query.replace(/\s/g,'')))continue;
+    const option=element('option',`${value.name} · ${value.phone}`);option.value=key;select.append(option);
+  }
+  if([...select.options].some(option=>option.value===selected))select.value=selected;
+}
 function render(){
   if(!data)return;
-  const people=data.people || {};
-  let total=0,paid=0,itemCount=0;
-  for(const p of values(people)){
-    const t=totals(p);
-    total+=cents(t.total);paid+=cents(t.paid);
-    itemCount+=values(p.items).length;
+  const people=data.people || {},collection=monday($('collection-week').value || today());
+  let purchases=0,collected=0,balance=0,credit=0,items=0;
+  for(const value of list(people)){
+    const result=account(value,data.activeWeek);purchases+=result.groups[data.activeWeek]?.total || 0;balance+=result.balance;credit+=result.credit;items+=Object.keys(value.items||{}).length;
+    collected+=result.payments.filter(p=>p.paidOn && p.paidOn>=data.activeWeek && p.paidOn<=addDays(data.activeWeek,6)).reduce((sum,p)=>sum+cents(p.amount),0);
   }
-  $("week").textContent=data.weekLabel || "Semana actual";
-  $("summary").textContent=
-    `Total: ${money(total/100)} | Pagado: ${money(paid/100)} | Saldo: ${money((total-paid)/100)}`;
-  $("counts").textContent=`${values(people).length} personas · ${itemCount} artículos · MXN`;
-  for(const [key,view] of cards){
-    if(!Object.hasOwn(people,key)){view.node.remove();cards.delete(key);}
-  }
-  for(const [key,person] of entries(people)){
-    let view=cards.get(key);
-    if(!view){view=personView(key);cards.set(key,view);$("people").append(view.node);}
-    view.refresh(person);
-  }
-  const order=entries(people);
-  const mode=$("sort").value;
-  if(mode==="owed-desc")order.sort((a,b)=>totals(b[1]).balance-totals(a[1]).balance);
-  else if(mode==="owed-asc")order.sort((a,b)=>totals(a[1]).balance-totals(b[1]).balance);
-  for(const [key] of order){const view=cards.get(key);if(view)$("people").append(view.node);}
-  filter();
+  $('week-label').textContent=weekText(data.activeWeek);
+  $('summary').textContent=`Compras de esta semana: ${money(purchases)} · Cobrado esta semana: ${money(collected)} · Saldo pendiente total: ${money(balance)}`+(credit?` · A favor: ${money(credit)}`:'')+` · ${Object.keys(people).length} personas · ${items} artículos`;
+  $('collection-label').textContent=`Estado de pagos del ${readableDate(collection)} al ${readableDate(addDays(collection,6))}. Los pagos se aplican al vencimiento pendiente más antiguo.`;
+  for(const [key,view] of cards){if(!people[key]){view.node.remove();cards.delete(key);}}
+  for(const [key,value] of records(people)){let view=cards.get(key);if(!view){view=createCard(key);cards.set(key,view);$('people').append(view.node);}view.refresh(value);}
+  const order=records(people);
+  const mode=$('sort').value;
+  if(mode==='owed-desc')order.sort((a,b)=>account(b[1],data.activeWeek).balance-account(a[1],data.activeWeek).balance);
+  else if(mode==='owed-asc')order.sort((a,b)=>account(a[1],data.activeWeek).balance-account(b[1],data.activeWeek).balance);
+  for(const [key] of order){const view=cards.get(key);if(view)$('people').append(view.node);}
+  filterCards();refreshPaymentDropdown();
 }
-function filter(){
-  const query=cleanSearch($("search").value.trim());
-  const digits=query.replace(/\D/g,"");
-  let shown=0;
-  for(const [key,view] of cards){
-    const p=data.people[key];
-    const matches=!query ||
-      cleanSearch(p.name+" "+p.phone).includes(query) ||
-      (digits.length>0 && p.phone.replace(/\D/g,"").includes(digits));
-    view.node.hidden=!matches;
-    if(matches)shown++;
-  }
-  $("empty").hidden=shown>0;
+function filterCards(){
+  const query=normalize($('search').value),digits=query.replace(/\D/g,'');let visible=0;
+  for(const [key,view] of cards){const value=person(key);const matches=!query || normalize(value.name+' '+value.phone).includes(query) || (digits && key.includes(digits));view.node.hidden=!matches;if(matches)visible++;}
+  $('empty').hidden=visible>0;
 }
-$("search").addEventListener("input",filter);
-$("sort").addEventListener("change",()=>{render();});
-
-submitForm($("person-form"),async()=>{
-  if(!ready)throw Error("Espera a que termine la conexión.");
-  const form=$("person-form");
-  const name=form.elements.name.value.trim();
-  const phone=form.elements.phone.value.trim();
-  if(!name)throw Error("Escribe un nombre.");
-  const key=phoneKey(phone);
-  const result=await runTransaction(ref(db,personPath(key)),current=>
-    current===null ? {name,phone,note:null}:undefined,{applyLocally:false});
-  if(!result.committed)throw Error("Ya existe una persona con ese teléfono.");
-  form.reset();$("add-person").open=false;
+$('search').addEventListener('input',filterCards);
+$('sort').addEventListener('change',()=>{render();});
+$('payment-search').addEventListener('input',refreshPaymentDropdown);
+$('collection-week').addEventListener('change',()=>{if(validDate($('collection-week').value))render();});
+handleSubmit($('quick-payment'),async()=>{
+  const form=$('quick-payment');await registerPayment(form.elements.person.value,form.elements.amount.value,form.elements.date.value,form.elements.note.value);
+  form.elements.amount.value='';form.elements.note.value='';
 });
-
-$("export").addEventListener("click",()=>{try{exportData();}catch(e){fail(e);}});
-$("import").addEventListener("click",()=>$("import-file").click());
-
-function validateImport(raw){
-  if(!raw || typeof raw!=="object" || !raw.people ||
-    typeof raw.people!=="object")
-    throw Error("El archivo debe contener un objeto con la propiedad people.");
-  const result={
-    weekLabel:typeof raw.weekLabel==="string" ? raw.weekLabel:initialWeek,
-    currency:"MXN",people:{}
-  };
-  const validId=id=>/^[a-zA-Z0-9_-]{1,150}$/.test(id);
-  for(const person of values(raw.people)){
-    if(!person || typeof person.name!=="string" ||
-      typeof person.phone!=="string" || !person.name.trim())
-      throw Error("Hay una persona con nombre o teléfono inválido.");
-    const key=phoneKey(person.phone);
-    if(Object.hasOwn(result.people,key))throw Error("Hay teléfonos duplicados.");
-    const p={
-      name:person.name,phone:person.phone,
-      note:typeof person.note==="string"?person.note:null,items:{},payments:{}
-    };
-    for(const [oldId,item] of entries(person.items)){
-      if(!item || typeof item.name!=="string" || !item.name.trim())
-        throw Error("Hay un artículo sin nombre válido.");
-      const id=Array.isArray(person.items)?"item_"+oldId:oldId;
-      if(!validId(id))throw Error("Identificador de artículo inválido.");
-      if(item.photo && !photoSource(item.photo))throw Error("Hay una foto inválida.");
-      p.items[id]={
-        name:item.name,price:amount(item.price,true),
-        date:typeof item.date==="string"?item.date:"",
-        detail:typeof item.detail==="string"?item.detail:"",
-        flag:typeof item.flag==="string"?item.flag:null,
-        photo:item.photo || null
-      };
+handleSubmit($('add-person'),async()=>{
+  const form=$('add-person'),name=form.elements.name.value.trim(),phone=form.elements.phone.value.trim(),key=phoneKey(phone);
+  if(!name)throw Error('Escribe un nombre.');
+  const result=await runTransaction(ref(database,path(key)),current=>current===null?{name,phone}:undefined,{applyLocally:false});
+  if(!result.committed)throw Error('Ya existe una persona con ese teléfono.');form.reset();
+});
+$('export').addEventListener('click',exportData);
+$('new-week').addEventListener('click',async()=>{
+  try{
+    const start=field('Lunes de la nueva semana','date',true);start.input.value=addDays(data.activeWeek,7);
+    if(!await confirmDialog('Abrir una nueva semana de compras. Los saldos, pagos y planes continúan con sus fechas originales.',[start.wrapper]))return;
+    if(!validDate(start.input.value) || monday(start.input.value)!==start.input.value || start.input.value<=data.activeWeek)throw Error('Selecciona un lunes posterior a la semana activa.');
+    if(!await confirmDialog('¿Confirmar el cambio de semana? Se descargará una copia de los datos actuales.'))return;
+    exportData();const expected=data.activeWeek,newWeek=start.input.value;
+    const result=await runTransaction(ref(database,'tracker'),current=>{
+      if(!current || current.activeWeek!==expected)return;
+      for(const person of list(current.people))for(const item of list(person.items))item.weekId=item.weekId || expected;
+      current.weeks=current.weeks || {};current.weeks[newWeek]={start:newWeek,label:weekLabel(newWeek)};
+      current.activeWeek=newWeek;current.weekLabel=weekLabel(newWeek);return current;
+    },{applyLocally:false});
+    if(!result.committed)throw Error('La semana cambió desde otra ventana. Revisa la semana activa.');notice('Nueva semana abierta.');
+  }catch(error){failure(error);}
+});
+function validateBackup(raw){
+  if(!raw || typeof raw!=='object' || typeof raw.people!=='object')throw Error('El archivo no contiene un respaldo válido.');
+  const result=structuredClone(raw);result.people={};
+  for(const value of list(raw.people)){
+    if(!value || typeof value.name!=='string' || !value.name.trim() || typeof value.phone!=='string')throw Error('Hay una persona inválida.');
+    const key=phoneKey(value.phone);if(result.people[key])throw Error('Hay teléfonos duplicados.');
+    value.items=Object.fromEntries(records(value.items).map(([id,item])=>{
+      if(!/^[A-Za-z0-9_-]+$/.test(id) || !item || typeof item.name!=='string')throw Error('Artículo inválido.');
+      item.price=parseAmount(item.price,true);if(item.weekId && !validDate(item.weekId))throw Error('Semana inválida.');
+      if(item.photo && !imageSource(item.photo))throw Error('Foto inválida.');return [id,item];
+    }));
+    for(const [id,payment] of records(value.payments)){
+      if(!/^[A-Za-z0-9_-]+$/.test(id) || !payment || parseAmount(payment.amount)<=0)throw Error('Pago inválido.');
+      if(!paymentDate(payment))throw Error('Hay un pago sin fecha válida.');
     }
-    for(const [oldId,payment] of entries(person.payments)){
-      const id=Array.isArray(person.payments)?"payment_"+oldId:oldId;
-      if(!validId(id) || !payment)throw Error("Pago inválido.");
-      const value=amount(payment.amount);
-      if(value<=0)throw Error("Los pagos deben ser mayores que cero.");
-      p.payments[id]={
-        amount:value,note:typeof payment.note==="string"?payment.note:"",
-        date:typeof payment.date==="string"?payment.date:""
-      };
-    }
-    result.people[key]=p;
+    for(const [week,plan] of records(value.plans))if(!validDate(week) || !WEEK_OPTIONS.includes(Number(plan.count)) || !validDate(plan.firstDue))throw Error('Plan de pago inválido.');
+    result.people[key]=value;
   }
-  return result;
+  if(result.schemaVersion>2)throw Error('Este respaldo necesita una versión más reciente del sitio.');
+  if(result.schemaVersion===2 && !validDate(result.activeWeek))throw Error('Semana activa inválida.');
+  return migrateTracker(result);
 }
-$("import-file").addEventListener("change",async event=>{
+$('import').addEventListener('click',()=>$('import-file').click());
+$('import-file').addEventListener('change',async event=>{
   try{
     const file=event.target.files[0];if(!file)return;
-    if(file.size>50*1024*1024)throw Error("El archivo debe pesar menos de 50 MB.");
-    const imported=validateImport(JSON.parse(await file.text()));
-    const answer=await confirmAction(
-      "¿Reemplazar todos los datos compartidos con este archivo? Se descargará una copia de los datos actuales antes de continuar.");
-    if(!answer.ok)return;
-    exportData();
-    await set(ref(db,"tracker"),imported);
-    notify("Datos importados.");
-  }catch(e){fail(e);}finally{event.target.value="";}
+    if(file.size>50*1024*1024)throw Error('El respaldo debe pesar menos de 50 MB.');
+    const imported=validateBackup(JSON.parse(await file.text()));
+    if(!await confirmDialog('¿Reemplazar los datos compartidos con este respaldo? Se descargará una copia de los datos actuales.'))return;
+    exportData();await set(ref(database,'tracker'),imported);notice('Respaldo importado.');
+  }catch(error){failure(error);}finally{event.target.value='';}
 });
-
-$("new-week").addEventListener("click",async()=>{
-  try{
-    const first=await confirmAction(
-      "Nueva semana: se conservarán las personas, sus teléfonos y sus notas. Se quitarán todos los artículos y pagos.",
-      "Semana nueva");
-    if(!first.ok)return;
-    if(!first.value)throw Error("Escribe la etiqueta de la nueva semana.");
-    const second=await confirmAction(
-      "¿Confirmar el inicio de la nueva semana? Se descargará una copia antes de borrar los artículos y pagos.");
-    if(!second.ok)return;
-    exportData();
-    const changes={weekLabel:first.value};
-    for(const key of Object.keys(data.people || {})){
-      changes["people/"+key+"/items"]=null;
-      changes["people/"+key+"/payments"]=null;
-    }
-    await update(ref(db,"tracker"),changes);
-    notify("Nueva semana iniciada.");
-  }catch(e){fail(e);}
-});
-
 try{
   const [appSDK,databaseSDK]=await Promise.all([
-    import("https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js"),
-    import("https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js")
+    import('https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js'),
+    import('https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js')
   ]);
-  ({ref,set,update,remove,push,runTransaction,onValue,get}=databaseSDK);
-  db=databaseSDK.getDatabase(appSDK.initializeApp(firebaseConfig));
-  const tracker=ref(db,"tracker");
-
-  // La transacción impide que dos primeras visitas sobrescriban datos.
-  const existing=await get(tracker);
-  if(!existing.exists()){
-    await runTransaction(tracker,current=>
-      current===null ? clone(seed):undefined,{applyLocally:false});
-  }
-
+  ({ref,get,set,push,runTransaction,onValue}=databaseSDK);
+  database=databaseSDK.getDatabase(appSDK.initializeApp(firebaseConfig));
+  const tracker=ref(database,'tracker');await get(tracker);
+  await runTransaction(tracker,current=>{
+    if(current?.schemaVersion>=2)return;
+    return migrateTracker(current || {people:{},weekLabel:INITIAL_LABEL});
+  },{applyLocally:false});
   onValue(tracker,snapshot=>{
-    data=snapshot.val() || {weekLabel:initialWeek,currency:"MXN",people:{}};
-    ready=true;
+    const value=snapshot.val();
+    data=value || {schemaVersion:2,activeWeek:INITIAL_WEEK,weekLabel:INITIAL_LABEL,weeks:{[INITIAL_WEEK]:{start:INITIAL_WEEK,label:INITIAL_LABEL}},people:{}};
+    if(data.schemaVersion!==2){notice('Se detectó una versión de datos diferente. Recarga la página.');return;}
     render();
-    for(const id of ["new-week","export","import"])$(id).disabled=false;
-    $("person-form").querySelector("button").disabled=false;
-  },error=>{
-    $("status").textContent="No se pudieron leer los datos.";
-    fail(error);
+    for(const id of ['new-week','export','import'])$(id).disabled=false;
+    $('quick-payment').elements.person.disabled=false;
+    $('quick-payment').querySelector('button').disabled=false;
+    $('add-person').querySelector('button').disabled=false;
+    if(!value)notice('No hay datos en Firebase. Importa tu respaldo JSON para recuperar tus compras y pagos.');
+  },failure);
+  onValue(ref(database,'.info/connected'),snapshot=>{
+    $('connection').textContent=snapshot.val()?'Conectado · Cambios compartidos en tiempo real':'Sin conexión · Mantén la página abierta hasta que se guarden los cambios';
   });
-  onValue(ref(db,".info/connected"),snapshot=>{
-    $("status").textContent=snapshot.val()
-      ? "Conectado · Cambios compartidos en tiempo real"
-      : "Sin conexión · Mantén esta página abierta hasta que se guarden los cambios";
-  });
-}catch(error){
-  $("status").textContent="No se pudo conectar con Firebase.";
-  fail(error);
-}
+  setInterval(()=>{if(data)render();},60000);
+}catch(error){$('connection').textContent='No se pudo conectar con Firebase.';failure(error);}
 </script>
 </body>
 </html>
