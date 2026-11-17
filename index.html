@@ -341,11 +341,15 @@ function confirmDialog(text, fields = []) {
     dialog.showModal();
   });
 }
-function messageDialog(text) {
+function messageDialog(text, phone) {
   const dialog = $('dialog'); dialog.replaceChildren();
   const message = field('Mensaje de WhatsApp','textarea'); message.input.value = text;
   const link = element('a','Abrir WhatsApp'); link.target = '_blank'; link.rel = 'noopener noreferrer';
-  const updateLink = () => { link.href = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(message.input.value); };
+  const digits = String(phone).replace(/\D/g, '');
+  if (!/^[1-9]\d{6,14}$/.test(digits)) {
+    throw Error('Revisa el teléfono del cliente e incluye el código de país.');
+  }
+  const updateLink = () => { link.href = `https://wa.me/${digits}?text=${encodeURIComponent(message.input.value)}`; };
   updateLink(); message.input.addEventListener('input',updateLink);
   const actions = element('div',null,'actions'); actions.append(link,button('Cerrar',()=>dialog.close()));
   dialog.append(message.wrapper,actions); dialog.showModal();
@@ -474,11 +478,11 @@ function createCard(key) {
   const itemViews=new Map();
   function chosenGroup(){return account(person(key),data.activeWeek).groups[purchaseWeek.input.value];}
   const overdueButton=button('Recordatorio de pago vencido',()=>{
-    menu.open=false;messageDialog('Te espero con tu pago');
+    menu.open=false;messageDialog('Te espero con tu pago',person(key).phone);
   });
   menuItems.append(
-    button('Resumen de cuenta',()=>{menu.open=false;messageDialog(accountMessage(person(key),chosenGroup(),weekText(purchaseWeek.input.value)));}),
-    button('Recordatorio de pago',()=>{menu.open=false;messageDialog('Te espero con tu pago');}),
+    button('Resumen de cuenta',()=>{menu.open=false;messageDialog(accountMessage(person(key),chosenGroup(),weekText(purchaseWeek.input.value)),person(key).phone);}),
+    button('Recordatorio de pago',()=>{menu.open=false;messageDialog('Te espero con tu pago',person(key).phone);}),
     overdueButton,
     button('Confirmación de pago',()=>{
       const result=account(person(key),data.activeWeek), latest=result.payments.at(-1);
@@ -487,7 +491,7 @@ function createCard(key) {
       const unpriced=list(result.groups).some(group=>group.unknown>0);
       const closing=unpriced?`Quedan artículos con precio por confirmar. Saldo de los artículos con precio: ${money(result.balance)}.`:
         (result.balance===0?'Tu cuenta está liquidada. ¡Gracias!':`Tu saldo pendiente es de ${money(result.balance)}. ¡Gracias!`);
-      messageDialog(`Hola, ${person(key).name}. Ya quedó registrado tu pago de ${money(cents(latest.amount))}. `+closing);
+      messageDialog(`Hola, ${person(key).name}. Ya quedó registrado tu pago de ${money(cents(latest.amount))}. `+closing,person(key).phone);
     })
   );
   const planSection=element('section',null,'section');planSection.append(element('h3','Plan de pago de estas compras'));
