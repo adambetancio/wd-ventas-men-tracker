@@ -17,11 +17,12 @@ header #summary{font-size:18px;font-weight:700;margin-top:12px}
 header #counts{color:#bbf7d0}
 header #status{color:#d1fae5}
 small,.muted{color:#6b7280}
-button,input,textarea{font:inherit}
+button,input,textarea,select{font:inherit}
 button{background:#fff;border:1px solid #d1d5db;border-radius:8px;padding:8px 12px;color:#1f2937;cursor:pointer;font-weight:600}
 button:hover{background:#f3f4f6;border-color:#9ca3af}
 button:disabled{opacity:.55;cursor:wait}
-input,textarea{border:1px solid #d1d5db;border-radius:8px;background:#fff;padding:9px 11px;width:100%;min-width:0}
+input,textarea,select{border:1px solid #d1d5db;border-radius:8px;background:#fff;padding:9px 11px;width:100%;min-width:0}
+select{width:auto;cursor:pointer}
 input:focus,textarea:focus{border-color:#16a34a;outline:2px solid #bbf7d0}
 textarea{resize:vertical;min-height:65px}
 label{display:grid;gap:4px;color:#4b5563}
@@ -84,6 +85,11 @@ dialog .actions{justify-content:flex-end;margin-top:20px}
 <div class="toolbar">
 <input id="search" type="search" placeholder="Buscar por nombre o teléfono"
 aria-label="Buscar por nombre o teléfono">
+<select id="sort" aria-label="Ordenar personas">
+<option value="default">Orden: como siempre</option>
+<option value="owed-desc" selected>Más adeudado primero</option>
+<option value="owed-asc">Menos adeudado primero</option>
+</select>
 <button id="new-week" disabled>Nueva semana</button>
 <button id="export" disabled>Exportar datos (JSON)</button>
 <button id="import" disabled>Importar datos (JSON)</button>
@@ -668,6 +674,11 @@ function render(){
     if(!view){view=personView(key);cards.set(key,view);$("people").append(view.node);}
     view.refresh(person);
   }
+  const order=entries(people);
+  const mode=$("sort").value;
+  if(mode==="owed-desc")order.sort((a,b)=>totals(b[1]).balance-totals(a[1]).balance);
+  else if(mode==="owed-asc")order.sort((a,b)=>totals(a[1]).balance-totals(b[1]).balance);
+  for(const [key] of order){const view=cards.get(key);if(view)$("people").append(view.node);}
   filter();
 }
 function filter(){
@@ -685,6 +696,7 @@ function filter(){
   $("empty").hidden=shown>0;
 }
 $("search").addEventListener("input",filter);
+$("sort").addEventListener("change",()=>{render();});
 
 submitForm($("person-form"),async()=>{
   if(!ready)throw Error("Espera a que termine la conexión.");
